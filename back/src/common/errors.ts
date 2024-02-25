@@ -1,4 +1,5 @@
 export const AppError = {
-    USER_ALREADY_EXIST: 'user with this email alrady exist',
-    
+    USER_ALREADY_EXIST: 'the email is already taken by another user',
+    COOKER_ALREADY_EXIST: 'the email is already taken by another cooker',
+    INCORRECT_CREDENTIALS: 'incorrect credentials',
 }
