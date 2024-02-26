@@ -20,26 +20,26 @@ export class UserService {
         return this.userRepository.findOne({where: {email, type: 'cooker'}});
     }
 
-    async createUser(dto: CreateUserDto) : Promise<CreateUserDto> {
+    async createUser(dto: CreateUserDto) : Promise<User> {
         dto.password = await this.hashPassword(dto.password);
-        await this.userRepository.create({
+        const user = await this.userRepository.create({
             username: dto.username,
             email: dto.email,
             password: dto.password,
             type: 'user'
         });
-        return dto;
+        return user;
     }
 
-    async createCooker(dto: CreateUserDto) : Promise<CreateUserDto> {        
+    async createCooker(dto: CreateUserDto) : Promise<User> {        
         dto.password = await this.hashPassword(dto.password);
-        await this.userRepository.create({
+        const cooker = await this.userRepository.create({
             username: dto.username,
             email: dto.email,
             password: dto.password,
             type: 'cooker'
         });
-        return dto;
+        return cooker;
     }
 
 

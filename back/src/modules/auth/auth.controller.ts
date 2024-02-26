@@ -1,33 +1,45 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto';
 import { LoginUserDto } from './dto';
+import { Response } from 'express';
 
-@Controller('auth')
+@Controller('')
 export class AuthController {
     constructor(
         private readonly authService: AuthService
     ) {}
 
     @Post('register/user')
-    registerUser(@Body() dto: CreateUserDto) {
-        return this.authService.registerUser(dto);
+    async registerUser(@Body() dto: CreateUserDto, @Res() res: Response) {
+        const { user, token } = await this.authService.registerUser(dto);
+        res.cookie('token', token, {httpOnly: true});
+        res.status(200);
+        res.send(user);
     }
 
     @Post('register/cooker')
-    registerCooker(@Body() dto: CreateUserDto) {
-        return this.authService.registerCooker(dto);
+    async registerCooker(@Body() dto: CreateUserDto, @Res() res: Response) {
+        const { user: cooker, token } = await this.authService.registerCooker(dto);
+        res.cookie('token', token, {httpOnly: true});
+        res.status(200);
+        res.send(cooker);
     }
 
     @Post('login/user')
-    loginUser(@Body() dto: LoginUserDto) {
-        return this.authService.loginUser(dto);
-
+    async loginUser(@Body() dto: LoginUserDto, @Res() res: Response) {
+        const { user, token } = await this.authService.loginUser(dto);
+        res.cookie('token', token, {httpOnly: true});
+        res.status(200);
+        res.send(user);
     }
 
     @Post('login/cooker')
-    loginCooker(@Body() dto: LoginUserDto) {
-        return this.authService.loginCooker(dto);
+    async loginCooker(@Body() dto: LoginUserDto, @Res() res: Response) {
+        const { user: cooker, token } = await this.authService.loginCooker(dto);
+        res.cookie('token', token, {httpOnly: true});
+        res.status(200);
+        res.send(cooker);
     }
 
 }
