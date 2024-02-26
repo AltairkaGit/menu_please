@@ -33,7 +33,7 @@ export class AuthService {
     async loginUser(dto: LoginUserDto) : Promise<{user: User, token: string}> {
         const user = await this.userService.findUserByEmail(dto.email);
         if (!user) throw new BadRequestException(AppError.INCORRECT_CREDENTIALS);
-        const validatePassword = bcrypt.compare(dto.password, user.password);
+        const validatePassword = await bcrypt.compare(dto.password, user.password);
         if (!validatePassword) throw new BadRequestException(AppError.INCORRECT_CREDENTIALS);
         const token = await this.tokenService.generateToken({role: user.type, userId: user.id})
         return {user, token};
@@ -42,7 +42,7 @@ export class AuthService {
     async loginCooker(dto: LoginUserDto) : Promise<{user: User, token: string}> {
         const cooker = await this.userService.findCookerByEmail(dto.email);
         if (!cooker) throw new BadRequestException(AppError.INCORRECT_CREDENTIALS);
-        const validatePassword = bcrypt.compare(dto.password, cooker.password);
+        const validatePassword = await bcrypt.compare(dto.password, cooker.password);
         if (!validatePassword) throw new BadRequestException(AppError.INCORRECT_CREDENTIALS);
         const token = await this.tokenService.generateToken({role: cooker.type, userId: cooker.id})
         return {user: cooker, token};

@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto';
 import { LoginUserDto } from './dto';
 import { Response } from 'express';
+import { JwtGuard } from '@src/guards/jwt-guard';
 
 @Controller('')
 export class AuthController {
@@ -41,5 +42,4 @@ export class AuthController {
         res.status(200);
         res.send(cooker);
     }
-
 }
