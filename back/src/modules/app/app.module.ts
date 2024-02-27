@@ -5,12 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import configurations from '@src/configurations';
 import { User } from '@modules/user/model/user.model';
-import { UserService } from '@modules/user/user.service';
-import { UserController } from '@modules/user/user.controller';
-import { AuthController } from '@modules/auth/auth.controller';
-import { AuthService } from '../auth/auth.service';
-import { UserModule } from '../user/user.module';
-import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '@modules/user/user.module';
+import { AuthModule } from '@modules/auth/auth.module';
+import { Dish } from '@modules/dish/model/dish.model';
+import { UploadModule } from '../upload/upload.module';
+import { DishModule } from '../dish/dish.module';
 
 @Module({
   imports: [
@@ -32,12 +31,15 @@ import { AuthModule } from '../auth/auth.module';
         autoLoadModels: true,
         schema: 'please',
         models: [
-          User
+          User,
+          Dish
         ]
       })
     }),
     UserModule,
-    AuthModule
+    AuthModule,
+    UploadModule,
+    DishModule
   ],
   controllers: [AppController],
   providers: [AppService],
