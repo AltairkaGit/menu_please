@@ -1,5 +1,7 @@
-import { DataTypes } from "sequelize";
-import { Column, Model, Table } from "sequelize-typescript";
+import { DishList } from "@src/modules/dish-list/model/dish-list.model";
+import { Dish } from "@src/modules/dish/model/dish.model";
+import { DataTypes, NonAttribute } from "sequelize";
+import { Column, HasMany, Model, Table } from "sequelize-typescript";
 
 @Table({
     tableName: 'customers'
@@ -16,4 +18,10 @@ export class User extends Model {
 
     @Column(DataTypes.STRING(12))
     type: 'cooker' | 'user'
+
+    @HasMany(() => DishList, 'ownerId')
+    dishLists: NonAttribute<DishList[]>
+
+    @HasMany(() => Dish, 'cookerId')
+    cookedDishes: NonAttribute<Dish[]>
 }

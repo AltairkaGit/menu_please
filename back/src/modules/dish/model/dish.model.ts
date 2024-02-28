@@ -1,5 +1,8 @@
-import { DataTypes } from "sequelize";
-import { Column, Model, Table } from "sequelize-typescript";
+import { User } from "@src/modules/user/model/user.model";
+import { DataTypes, NonAttribute } from "sequelize";
+import { BelongsTo, Column, HasMany, Model, NotNull, Table } from "sequelize-typescript";
+import { Tutorial } from "./tutorial.model";
+import { DishCategory } from "./dish-category.model";
 
 export enum Meal {
     breakfast,
@@ -28,4 +31,16 @@ export class Dish extends Model {
 
     @Column(DataTypes.TEXT)
     recipe: string
+
+    @HasMany(() => DishCategory, 'dishId')
+    categories: NonAttribute<DishCategory[]>
+
+    @HasMany(() => Tutorial, 'dishId')
+    tutorials: NonAttribute<Tutorial[]>
+
+    @BelongsTo(() => User, 'cookerId')
+    cooker: NonAttribute<User>
+
+    @NotNull
+    cookerId: number
 }

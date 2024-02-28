@@ -1,5 +1,29 @@
 import { ArrayMinSize, IsArray, IsEnum, IsNumber, IsNumberString, IsString } from "class-validator"
-import { Meal } from "@modules/dish/model/dish.model"
+import { Dish, Meal } from "@modules/dish/model/dish.model"
+
+export class DishDto {
+    constructor (dish: Dish, categories: Meal[], tutorials: string[]) {
+        this.name = dish.name
+        this.picture = dish.picture
+        this.proteins = dish.proteins
+        this.fats = dish.fats
+        this.carbohydrates = dish.carbohydrates
+        this.recipe = dish.recipe
+        this.tutorials = tutorials
+        this.categories = categories.map(meal => meal.toLocaleString())
+        this.calories = dish.fats * 9 + (dish.carbohydrates + dish.proteins) * 4
+    }
+
+    name: string
+    picture: string
+    calories: number
+    proteins: number
+    fats: number
+    carbohydrates: number
+    recipe: string
+    tutorials: string[]
+    categories: string[]
+}
 
 export class CreateDishFormDto {
     @IsString()
@@ -17,15 +41,15 @@ export class CreateDishFormDto {
     @IsString()
     recipe: string
     
-    // @IsArray()
-    // @IsString({ each: true })
-    // @ArrayMinSize(1)
-    // tutorials: string[]
+    @IsArray()
+    @IsString({ each: true })
+    @ArrayMinSize(1)
+    tutorials: string[]
 
-    // @IsEnum(Meal)
-    // @IsString({ each: true })
-    // @ArrayMinSize(1)
-    // categories: Meal[]
+    @IsEnum(Meal)
+    @IsString({ each: true })
+    @ArrayMinSize(1)
+    categories: Meal[]
 }
 
 export class UpdateDishGeneralDto {
@@ -88,7 +112,7 @@ export class RemoveDishCategoryDto {
     category: Meal
 }
 
-export class DeleteDish {
+export class DeleteDishDto {
     @IsNumber()
     id: number
 }

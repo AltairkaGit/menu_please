@@ -10,6 +10,11 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { Dish } from '@modules/dish/model/dish.model';
 import { UploadModule } from '../upload/upload.module';
 import { DishModule } from '../dish/dish.module';
+import { DishListModule } from '../dish-list/dish-list.module';
+import { DishList } from '../dish-list/model/dish-list.model';
+import { DishListDishes } from '../dish-list/model/dish-list-dishes.model';
+import { Tutorial } from '../dish/model/tutorial.model';
+import { DishCategory } from '../dish/model/dish-category.model';
 
 @Module({
   imports: [
@@ -32,14 +37,19 @@ import { DishModule } from '../dish/dish.module';
         schema: 'please',
         models: [
           User,
-          Dish
+          Dish,
+          DishList,
+          DishCategory,
+          DishListDishes,
+          Tutorial
         ]
       })
     }),
     UserModule,
     AuthModule,
     UploadModule,
-    DishModule
+    DishModule,
+    DishListModule
   ],
   controllers: [AppController],
   providers: [AppService],
