@@ -2,18 +2,19 @@ import { ArrayMinSize, IsArray, IsEnum, IsNumber, IsNumberString, IsString } fro
 import { Dish, Meal } from "@modules/dish/model/dish.model"
 
 export class DishDto {
-    constructor (dish: Dish, categories: Meal[], tutorials: string[]) {
+    constructor (dish: Dish, categories: Meal[], tutorials?: string[]) {
+        this.id = dish.id
         this.name = dish.name
         this.picture = dish.picture
         this.proteins = dish.proteins
         this.fats = dish.fats
         this.carbohydrates = dish.carbohydrates
-        this.recipe = dish.recipe
-        this.tutorials = tutorials
+        this.recipe = dish.recipe;
+        this.tutorials = tutorials;
         this.categories = categories.map(meal => meal.toLocaleString())
         this.calories = dish.fats * 9 + (dish.carbohydrates + dish.proteins) * 4
     }
-
+    id: number
     name: string
     picture: string
     calories: number
@@ -21,7 +22,7 @@ export class DishDto {
     fats: number
     carbohydrates: number
     recipe: string
-    tutorials: string[]
+    tutorials: string[] | undefined
     categories: string[]
 }
 
@@ -41,13 +42,10 @@ export class CreateDishFormDto {
     @IsString()
     recipe: string
     
-    @IsArray()
-    @IsString({ each: true })
-    @ArrayMinSize(1)
-    tutorials: string[]
+    tutorials?: string[]
 
-    @IsEnum(Meal)
-    @IsString({ each: true })
+    @IsArray()
+    @IsString({each: true})
     @ArrayMinSize(1)
     categories: Meal[]
 }

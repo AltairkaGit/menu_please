@@ -1,6 +1,6 @@
 import { BelongsTo, Column, Model, Table } from "sequelize-typescript";
 import { Dish, Meal } from "./dish.model";
-import { NonAttribute } from "sequelize";
+import { DataTypes, NonAttribute } from "sequelize";
 
 @Table({
     tableName: 'dish_category'
@@ -9,9 +9,9 @@ export class DishCategory extends Model {
     @Column
     dishId: number
 
-    @Column
+    @Column(DataTypes.STRING(12))
     meal: Meal
 
-    @BelongsTo(() => Dish)
+    @BelongsTo(() => Dish, 'dishId')
     dish: NonAttribute<Dish>
 }

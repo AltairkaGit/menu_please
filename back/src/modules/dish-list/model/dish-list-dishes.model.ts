@@ -16,9 +16,9 @@ export class DishListDishes extends Model {
     @Column
     meal: Meal
 
-    @HasOne(() => DishList)
+    @HasOne(() => DishList, 'dishListId')
     dishList: NonAttribute<DishList>
 
-    @HasOne(() => Dish)
+    @HasOne(() => Dish, 'dishId')
     dish: NonAttribute<Dish>
 }

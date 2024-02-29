@@ -5,9 +5,9 @@ import { Tutorial } from "./tutorial.model";
 import { DishCategory } from "./dish-category.model";
 
 export enum Meal {
-    breakfast,
-    lunch,
-    dinner
+    breakfast = "breakfast",
+    lunch = "lunch",
+    dinner = "dinner"
 }
 
 @Table({
@@ -41,6 +41,6 @@ export class Dish extends Model {
     @BelongsTo(() => User, 'cookerId')
     cooker: NonAttribute<User>
 
-    @NotNull
+    @Column
     cookerId: number
 }

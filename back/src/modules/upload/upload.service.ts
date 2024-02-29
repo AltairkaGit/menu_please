@@ -26,5 +26,5 @@ export class UploadService {
         const path = `public/${filename}`;
         await fs.writeFile(path, file);
         return `http://${this.configService.get('host')}:${this.configService.get('port')}/${path}`;
-    }
+    } 
 }

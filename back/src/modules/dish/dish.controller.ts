@@ -99,7 +99,7 @@ export class DishController {
         return await this.dishService.updateDishGeneral(dish, dto);
     }
 
-    @Put('general')
+    @Put('recipe')
     @UseGuards(JwtGuard, RolesGuard, DishOwnerGuard)
     @Roles(Role.Cooker)
     async updateRecipe(@Body() dto: UpdateDishRecipeDto) {

@@ -16,6 +16,5 @@ export class DishList extends Model {
     dishes: NonAttribute<Dish[]>
 
     @Column
-    @NotNull
-    ownerId: number
+    cookerId: number
 }
