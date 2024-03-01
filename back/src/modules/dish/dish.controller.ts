@@ -26,8 +26,9 @@ export class DishController {
     @Get()
     getDishes(@Query() query: {
         take: number, 
-        skip: number, 
-        search: string, 
+        skip: number,
+        kind: string, 
+        name: string,
         ord: keyof Dish,
         dir: 'asc' | 'desc',
         meal: Meal

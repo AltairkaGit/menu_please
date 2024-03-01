@@ -31,10 +31,11 @@ export class DishService {
         });
     }
 
-    async getDishes({ take, skip, search, ord, dir, meal}: {
+    async getDishes({ take, skip, name, kind, ord, dir, meal}: {
         take: number, 
         skip: number, 
-        search: string, 
+        kind: string
+        name: string, 
         ord: keyof Dish,
         dir: 'asc' | 'desc',
         meal: Meal
@@ -45,7 +46,8 @@ export class DishService {
                 where: { meal }
             }],
             where: {
-                name: {[Op.like]: '%' + search + '%'},
+                kind: {[Op.like]: '%' + kind + '%'},
+                name: {[Op.like]: '%' + name + '%'},
             },
             order: [[
                 ord, dir
