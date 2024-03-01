@@ -49,7 +49,7 @@ export class DishController {
             }),
     ) picture: Express.Multer.File, @Body() body: CreateDishFormDto, @Req() req: any) {
         const { user } = req;
-        return this.dishService.createDish(picture, body, user.id);
+        return this.dishService.createDish(picture, body, user.userId);
     }
 
     @Delete()

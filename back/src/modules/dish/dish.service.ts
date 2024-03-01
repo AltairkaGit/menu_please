@@ -56,20 +56,20 @@ export class DishService {
     }
 
     async createDish(picture: Express.Multer.File, {categories, tutorials, ...body}: CreateDishFormDto, cookerId: number) : Promise<DishDto> {
-        console.log(categories)
         const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
         const dish = await this.dishRepository.create({
             picture: url,
+            kind: body.kind,
             name: body.name,
             proteins: Number(body.proteins),
             fats: Number(body.fats),
             carbohydrates: Number(body.carbohydrates),
             recipe: body.recipe,
-            cookerId
+            cookerId: cookerId,            
         });
         await Promise.all(categories.map(meal => this.addDishCategory(dish, meal)));
         tutorials && await Promise.all(tutorials.map(url => this.addTutorial(dish, url)));
-        return new DishDto(dish, categories, tutorials);
+        return new DishDto(dish, cookerId, categories, tutorials);
     }
 
     async removeDish(dish: Dish) : Promise<void> {

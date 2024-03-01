@@ -13,7 +13,7 @@ export class DishListOwnerGuard implements CanActivate {
     const { dishListId } = body;
     const dishList = await this.dishListService.getDishList(dishListId);
     if (!dishList) throw new BadRequestException(AppError.NO_DISH_LIST)
-    if (dishList.ownerId != user.id) return false;
+    if (dishList.ownerId != user.userId) return false;
     return true;
   }
 }

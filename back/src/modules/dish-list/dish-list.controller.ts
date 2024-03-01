@@ -14,7 +14,7 @@ export class DishListController {
     @UseGuards(JwtGuard)
     async getAllDishLists(@Req() req: any) {
         const { user } = req;
-        return await this.dishListService.getAllOwnerDishLists(user.id);
+        return await this.dishListService.getAllOwnerDishLists(user.userId);
     }
 
     @Get()
@@ -27,7 +27,7 @@ export class DishListController {
     @UseGuards(JwtGuard)
     async createDishList(@Req() req: any) {
         const { user } = req;
-        return await this.dishListService.createDishList(user.id);
+        return await this.dishListService.createDishList(user.userId);
     }
 
     @Delete()

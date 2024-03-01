@@ -16,6 +16,9 @@ export class Dish extends Model {
     @Column(DataTypes.TEXT)
     picture: string
 
+    @Column(DataTypes.STRING(20))
+    kind: string
+
     @Column(DataTypes.STRING(36))
     name: string
 
@@ -31,12 +34,13 @@ export class Dish extends Model {
     @Column(DataTypes.TEXT)
     recipe: string
 
+    @Column(DataTypes.INTEGER)
+    cookerId: number
+
     @HasMany(() => DishCategory, 'dishId')
     categories: NonAttribute<DishCategory[]>
 
     @HasMany(() => Tutorial, 'dishId')
     tutorials: NonAttribute<Tutorial[]>
-
-    @Column
-    cookerId: number
+    
 }

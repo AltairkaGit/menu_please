@@ -11,7 +11,7 @@ export class DishOwnerGuard implements CanActivate {
     const { user, body } = context.switchToHttp().getRequest();
     const { id } = body;
     const dish = await this.dishService.getDish(id);
-    if (dish.cookerId != user.id) return false;
+    if (dish.cookerId != user.userId) return false;
     return true;
   }
 }
