@@ -55,7 +55,7 @@ export class DishService {
         })
     }
 
-    async createDish(picture: Express.Multer.File, {categories, tutorials, ...body}: CreateDishFormDto) : Promise<DishDto> {
+    async createDish(picture: Express.Multer.File, {categories, tutorials, ...body}: CreateDishFormDto, cookerId: number) : Promise<DishDto> {
         console.log(categories)
         const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
         const dish = await this.dishRepository.create({
@@ -64,7 +64,8 @@ export class DishService {
             proteins: Number(body.proteins),
             fats: Number(body.fats),
             carbohydrates: Number(body.carbohydrates),
-            recipe: body.recipe
+            recipe: body.recipe,
+            cookerId
         });
         await Promise.all(categories.map(meal => this.addDishCategory(dish, meal)));
         tutorials && await Promise.all(tutorials.map(url => this.addTutorial(dish, url)));

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddDishCategoryDto, AddDishTutorialDto, CreateDishFormDto, DeleteDishDto, RemoveDishCategoryDto, RemoveDishTutorialDto, UpdateDishGeneralDto, UpdateDishRecipeDto } from './dto';
@@ -47,8 +47,9 @@ export class DishController {
             .build({
                 errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
             }),
-    ) picture: Express.Multer.File, @Body() body: CreateDishFormDto) {
-        return this.dishService.createDish(picture, body);
+    ) picture: Express.Multer.File, @Body() body: CreateDishFormDto, @Req() req: any) {
+        const { user } = req;
+        return this.dishService.createDish(picture, body, user.id);
     }
 
     @Delete()

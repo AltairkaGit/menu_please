@@ -1,6 +1,5 @@
-import { User } from "@src/modules/user/model/user.model";
 import { DataTypes, NonAttribute } from "sequelize";
-import { BelongsTo, Column, HasMany, Model, NotNull, Table } from "sequelize-typescript";
+import { Column, HasMany, Model, Table } from "sequelize-typescript";
 import { Tutorial } from "./tutorial.model";
 import { DishCategory } from "./dish-category.model";
 
@@ -37,9 +36,6 @@ export class Dish extends Model {
 
     @HasMany(() => Tutorial, 'dishId')
     tutorials: NonAttribute<Tutorial[]>
-
-    @BelongsTo(() => User, 'cookerId')
-    cooker: NonAttribute<User>
 
     @Column
     cookerId: number

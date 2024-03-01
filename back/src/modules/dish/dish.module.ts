@@ -14,6 +14,7 @@ import { DishOwnerGuard } from './dish-owner-guard';
 @Module({
   imports: [SequelizeModule.forFeature([Dish, DishCategory, DishList, DishListDishes, Tutorial, User]), UploadModule],
   providers: [DishService, DishOwnerGuard],
-  controllers: [DishController]
+  controllers: [DishController],
+  exports: [DishService]
 })
 export class DishModule {}
