@@ -2,8 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #292929;
+  }
+
+  ::selection {
+    @apply bg-green text-black;
+  }
+
+  h2 {
+    @apply text-5xl font-medium
+  }
+}
+
 @layer components {
+  .transition-link {
+    @apply text-lg text-white bg-black rounded-lg px-2 py-1 opacity-50 hover:opacity-100;
+  }
+
+  .title {
+    @apply font-display font-medium text-8xl;
+  }
+
   .input {
-    @apply bg-black text-white rounded-md w-555 
+    @apply bg-black text-white text-xl rounded-lg w-[26rem] box-border py-2
+      placeholder:text-white placeholder:opacity-70 shadow-md pl-8
+      focus-visible:border-none;
+  }
+
+  .btn {
+    @apply bg-green text-white rounded-lg box-border py-2 px-16 text-center
+      shadow-md text-2xl focus-visible:border-none;
+  }
+
+  .form {
+    @apply flex flex-col gap-4 items-center;
+  }
+
+  .form .btn {
+    @apply mt-3;
   }
 }

@@ -1,39 +1,31 @@
 import { MainPage } from "@pages/main-page"
-import { Login } from "@widgests/login"
-import { MainWidget } from "@widgests/main"
+import { LoginDashboard } from "@widgests/login-dashboard"
+import { LoginStudio } from "@widgests/login-studio"
+import { RegisterDashboard } from "@widgests/register-dashboard"
+import { RegisterStudio } from "@widgests/register-studio"
 import { AnimatePresence } from "framer-motion"
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements, useLocation } from "react-router-dom"
-
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" >
-      <Route path="" element={<MainPage />}>
-        <Route path="" element={<MainWidget />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register">
-          <Route path="/dashboard" element={}/>
-          <Route path="/studio" element={}/>
-        </Route>
-      </Route>
-      <Route path="/dashboard">
-        <Route path ="" />
-        <Route path="/studio" />
-      </Route>
-    </Route>
-    
-  )
-)
+import { Route, Routes, createBrowserRouter, createRoutesFromElements, useLocation } from "react-router-dom"
 
 
 const App = () => {
   const location = useLocation()
-
+  
   return (
     <AnimatePresence mode="wait">
-      <RouterProvider router={router} key={location.pathname} />
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" >
+          <Route path="" element={<MainPage />}>
+            <Route path="" element={<LoginDashboard />} />
+            <Route path="login/studio" element={<LoginStudio />} />
+            <Route path="register/dashboard" element={<RegisterDashboard />}/>
+            <Route path="register/studio" element={<RegisterStudio />}/>
+          </Route>
+          <Route path="dashboard" />
+          <Route path="studio" />
+        </Route>   
+      </Routes>
     </AnimatePresence>
   )
 }
 
-export default App
+export const router = createBrowserRouter(createRoutesFromElements(<Route path="*" element={<App />} />))

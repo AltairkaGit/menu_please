@@ -13,12 +13,13 @@ export default {
     },
     colors: {
       'white': '#ffffff',
-      'black': '292929',
+      'black': '#292929',
       'green': '#9AC95F',
     },
     fontFamily: {
       sans: ['Jost', 'sans-serif'],
-      serif: ['Lobster', 'serif'],
+      serif: [],
+      display: ['Lobster', 'serif'],
     },
     extend: {
       spacing: {
@@ -27,6 +28,8 @@ export default {
       },
       borderRadius: {
         '4xl': '2rem',
+      },
+      backgroundImage: {
       }
     }
   },
