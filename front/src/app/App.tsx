@@ -1,4 +1,8 @@
+import { DashboardPage } from "@pages/dashboard-page"
+import { DishPage } from "@pages/dish-page"
 import { MainPage } from "@pages/main-page"
+import { StudioPage } from "@pages/studio-page"
+import { PrivateRoutes } from "@shared/private-routes"
 import { LoginDashboard } from "@widgests/login-dashboard"
 import { LoginStudio } from "@widgests/login-studio"
 import { RegisterDashboard } from "@widgests/register-dashboard"
@@ -20,8 +24,13 @@ const App = () => {
             <Route path="register/dashboard" element={<RegisterDashboard />}/>
             <Route path="register/studio" element={<RegisterStudio />}/>
           </Route>
-          <Route path="dashboard" />
-          <Route path="studio" />
+          <Route path="dish" element={<DishPage/>}>
+            <Route path=":dishId" />
+          </Route>
+          <Route element={<PrivateRoutes />}>
+            <Route path="dashboard" element={<DashboardPage/>} />
+            <Route path="studio" element={<StudioPage />} />
+          </Route>          
         </Route>   
       </Routes>
     </AnimatePresence>

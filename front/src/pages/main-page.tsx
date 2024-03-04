@@ -6,10 +6,10 @@ export const MainPage = () => {
     return (
         <motion.main className="">
             <motion.section className={clsx("relative bg-[url('/src/static/bg.jpg')] h-dvh",
-                "bg-cover bg-center flex flex-col items-center gap-16 justify-center overflow-hidden")}>
-                <motion.img layout variants={{in: {right: '-220px', bottom: '-300px'},  out: {right: '-880px', bottom: '-1200px'}}} transition={{duration: 0.65}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/soup.png" />
-                <motion.img layout variants={{in: {left: '-220px',  top: '-240px'},     out: {left: '-1200px',  top: '-800px'}}} transition={{duration: 0.75}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/tray.png" />
-                <motion.img layout variants={{in: {right: '-170px', top: '-170px'},     out: {right: '-800px', top: '-800px'}}} transition={{duration: 1}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/salad.png" />
+                "flex flex-col items-center gap-16 justify-center overflow-hidden")}>
+                <motion.img layout variants={{in: {right: '-220px', bottom: '-300px'},  out: {right: '-880px', bottom: '-1200px'}}} transition={{duration: 0.6}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/soup.png" />
+                <motion.img layout variants={{in: {left: '-220px',  top: '-240px'},     out: {left: '-1200px',  top: '-800px'}}} transition={{duration: 0.7}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/tray.png" />
+                <motion.img layout variants={{in: {right: '-170px', top: '-170px'},     out: {right: '-800px', top: '-800px'}}} transition={{duration: 0.64}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/salad.png" />
                 <motion.img layout variants={{in: {left: '20px', bottom: '0px'},        out: {left: '-880px', bottom: '-1200px'}}} transition={{duration: 0.36}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/leafs_bot.png" />
                 <motion.img layout variants={{in: {right: '400px', top: '-180px'},      out: {right: '400px', top: '-800px'}}} transition={{duration: 0.25}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/leafs_top.png" />
                 <motion.img layout variants={{in: {left: '300px', bottom: '340px'},     out: {left: '-800px', bottom: '-340px'}}} transition={{duration: 0.24}} initial="out" animate="in" exit="out" className="absolute z-10 pointer-events-none" src="/src/static/paper1.png" />
