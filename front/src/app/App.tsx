@@ -1,3 +1,4 @@
+import { CabinetLayout } from "@pages/cabinet-layout"
 import { DashboardPage } from "@pages/dashboard-page"
 import { DishPage } from "@pages/dish-page"
 import { MainPage } from "@pages/main-page"
@@ -28,8 +29,10 @@ const App = () => {
             <Route path=":dishId" />
           </Route>
           <Route element={<PrivateRoutes />}>
-            <Route path="dashboard" element={<DashboardPage/>} />
-            <Route path="studio" element={<StudioPage />} />
+            <Route element={<CabinetLayout />}>
+              <Route path="dashboard" element={<DashboardPage/>} />
+              <Route path="studio" element={<StudioPage />} />
+            </Route>
           </Route>          
         </Route>   
       </Routes>

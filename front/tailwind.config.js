@@ -16,6 +16,12 @@ export default {
       'black': '#292929',
       'green': '#9AC95F',
     },
+    fontSize: {
+      'sm': '4.5rem',
+      'st': '6.5rem',
+      'lr': '8rem',
+      'ex': '12rem'
+    },
     fontFamily: {
       sans: ['Jost', 'sans-serif'],
       serif: [],
@@ -29,7 +35,10 @@ export default {
       borderRadius: {
         '4xl': '2rem',
       },
-      backgroundImage: {
+      boxShadow: {
+        'st': '0 0 4px rgba(0, 0, 0, .25)',
+        'lr': '0 0 8px rgba(0, 0, 0, .25)',
+        'ex': '0 0 16px rgba(0, 0, 0, .25)'
       }
     }
   },
