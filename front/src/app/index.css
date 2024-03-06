@@ -19,7 +19,7 @@
   }
 
   ::selection {
-    @apply bg-green text-black;
+    @apply bg-black text-white;
   }
 
   h2 {

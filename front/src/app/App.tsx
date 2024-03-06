@@ -1,13 +1,13 @@
-import { CabinetLayout } from "@pages/cabinet-layout"
+import { BaseLayout } from "@pages/base-layout"
 import { DashboardPage } from "@pages/dashboard-page"
 import { DishPage } from "@pages/dish-page"
 import { MainPage } from "@pages/main-page"
 import { StudioPage } from "@pages/studio-page"
 import { PrivateRoutes } from "@shared/private-routes"
-import { LoginDashboard } from "@widgests/login-dashboard"
-import { LoginStudio } from "@widgests/login-studio"
-import { RegisterDashboard } from "@widgests/register-dashboard"
-import { RegisterStudio } from "@widgests/register-studio"
+import { LoginDashboard } from "@widgests/login/login-dashboard"
+import { LoginStudio } from "@widgests/login/login-studio"
+import { RegisterDashboard } from "@widgests/register/register-dashboard"
+import { RegisterStudio } from "@widgests/register/register-studio"
 import { AnimatePresence } from "framer-motion"
 import { Route, Routes, createBrowserRouter, createRoutesFromElements, useLocation } from "react-router-dom"
 
@@ -29,7 +29,7 @@ const App = () => {
             <Route path=":dishId" />
           </Route>
           <Route element={<PrivateRoutes />}>
-            <Route element={<CabinetLayout />}>
+            <Route element={<BaseLayout />}>
               <Route path="dashboard" element={<DashboardPage/>} />
               <Route path="studio" element={<StudioPage />} />
             </Route>

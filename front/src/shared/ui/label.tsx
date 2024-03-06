@@ -11,12 +11,11 @@ export const Label = ({children, leftButton, rightButton, className, onClick, co
     className?: string,
     onClick?: () => void
 }) => {
-    return <motion.div onClick={onClick} className={clsx(
-        "w-[328px] h-[58px] text-st font-sans overflow-hidden flex items-center",
-        !leftButton && "pl-[58px]",
-        !rightButton && "pr-[58px]",
-        Corners[corners], 
-        className)}
+    return <motion.div onClick={onClick} className={clsx(className,
+        "w-[20.5rem] h-[3.625rem] text-st overflow-hidden flex items-center",
+        !leftButton && "pl-[3.625rem]",
+        !rightButton && "pr-[3.625rem]",
+        Corners[corners], className)}
     >
         {leftButton}
         <motion.div className="flex-1 text-center">

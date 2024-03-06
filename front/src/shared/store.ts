@@ -1,8 +1,9 @@
+import { authSlice } from "@entities/entrance/model/auth-slice"
 import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 
-const rootReducer = combineSlices()
+const rootReducer = combineSlices(authSlice)
 export type RootState = ReturnType<typeof rootReducer>
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {

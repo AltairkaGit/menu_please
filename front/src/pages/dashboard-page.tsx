@@ -1,18 +1,14 @@
 import { Label } from '@shared/ui/label'
-import { Header } from '@widgests/header'
-import { motion } from 'framer-motion'
-
+import { PageBody } from '@shared/ui/page-body'
+import { Header } from '@widgests/cabinet/shared/header'
+import { UserProfile } from '@widgests/cabinet/dashboard/user-profile'
+import { NewMenuButton } from '@entities/dish-list/ui/new-menu'
 
 const LeftLabel = <Label className="light-block" >Ваши меню</Label>
 
-export const DashboardPage = () => {
-    return (
-        <>
-        <Header leftLabel={LeftLabel} />
-        <motion.div className="pt-32">
-            Dashboard page
-        </motion.div>
-        </>
-        
-    )
-}
+export const DashboardPage = () => <>
+    <Header LeftLabel={LeftLabel} RightLabel={<UserProfile/>} />
+    <PageBody>
+        <NewMenuButton onClick={() => console.log('added new menu')} />
+    </PageBody>
+</>
