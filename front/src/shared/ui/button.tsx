@@ -1,18 +1,17 @@
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import { ReactNode } from "react"
+import { Corners, TCorners } from "./corners"
 
-export const Button = ({ onClick, children, className, corners, shadow } : {
-    onClick: () => {},
+export const Button = ({ onClick, children, className, corners = ''} : {
+    onClick: () => any,
     children: ReactNode,
-    className: string,
-    corners?: 'lg' | '3xl' | 'full',
-    shadow?: 'st' | 'lr' | 'ex',
+    className?: string,
+    corners?: TCorners
 }) => {
-    return <motion.button className={clsx(
-        "w-[58px] h-58-px",
-        "rounded", corners && '-' + corners,
-        shadow && "shadow-" + shadow,
+    return <motion.button onClick={onClick} className={clsx(
+        "w-[58px] h-[58px] flex justify-center items-center",
+        Corners[corners],
         className 
     )}>
         {children}

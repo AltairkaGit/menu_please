@@ -23,7 +23,7 @@
   }
 
   h2 {
-    @apply text-5xl font-medium
+    @apply text-5xl font-medium;
   }
 }
 
@@ -53,5 +53,13 @@
 
   .form .btn {
     @apply mt-3;
+  }
+
+  .dark-block {
+    @apply bg-black text-white;
+  }
+
+  .light-block {
+    @apply bg-white text-black shadow-st;
   }
 }
