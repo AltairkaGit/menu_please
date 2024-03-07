@@ -1,19 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadService } from '../upload/upload.service';
-import { CreateDishFormDto, DishDto } from './dto';
+import { CreateDishFormDto, DishDto, DishPreviewDto } from './dto';
 import { Dish, Meal } from './model/dish.model';
-import { InjectConnection, InjectModel } from '@nestjs/sequelize';
+import { InjectModel } from '@nestjs/sequelize';
 import { Tutorial } from './model/tutorial.model';
 import { DishCategory } from './model/dish-category.model';
 import { AppError } from '@src/common/errors';
 import { Op } from 'sequelize';
-import { Connection } from 'sequelize/types/dialects/abstract/connection-manager';
 
 @Injectable()
 export class DishService {
     constructor(
         private readonly uploadService: UploadService,
-        @InjectConnection() private readonly db: Connection,
         @InjectModel(Dish) private readonly dishRepository: typeof Dish,
         @InjectModel(DishCategory) private readonly dishCategoryRepository: typeof DishCategory,
         @InjectModel(Tutorial) private readonly tutorialRepository: typeof Tutorial
@@ -25,11 +23,31 @@ export class DishService {
         return new DishDto(dish, categories, tutorials[0]);
     }
 
+    async getDishesDto(dishes: Dish[]) {
+        return Promise.all(dishes.map(d => this.getDishDto(d)));
+    }
+
+    async getDishPreviewDto(dish: Dish) {
+        const res = new DishPreviewDto();
+        res.id = dish.id;
+        res.name = dish.name;
+        res.picture = dish.picture;
+        return res;
+    }
+
+    async getDishesPreviewDto(dishes: Dish[]) {
+        return Promise.all(dishes.map(d => this.getDishPreviewDto(d)));
+    }
+
     async getDish(id: number) : Promise<Dish> {
         const dish = await this.dishRepository.findByPk(id);
         if (!dish) throw new BadRequestException(AppError.NO_DISH);
         return dish;
     }
+
+    async getDishesByIds(ids: number[]) : Promise<Dish[]> {
+        return await this.dishRepository.findAll({ where: {id: {[Op.in]: ids}}});
+    } 
 
     async getCookerDishes(cookerId: number) : Promise<Dish[]> {
         return await this.dishRepository.findAll({where: { cookerId } });

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { DishListService } from './dish-list.service';
 import { JwtGuard } from '@src/guards/jwt-guard';
 import { DishListOwnerGuard } from './dish-list-owner-guard';
@@ -17,9 +17,9 @@ export class DishListController {
         return await this.dishListService.getAllOwnerDishLists(user.userId);
     }
 
-    @Get()
+    @Get('id/:id')
     @UseGuards(JwtGuard, DishListOwnerGuard)
-    async getDishList(@Body() { dishListId }: {dishListId: number }) {
+    async getDishList(@Param('id') dishListId: number) {
         return await this.dishListService.getDishList(dishListId);
     }
 
@@ -30,21 +30,21 @@ export class DishListController {
         return await this.dishListService.createDishList(user.userId);
     }
 
-    @Delete()
+    @Delete('id/:id')
     @UseGuards(JwtGuard, DishListOwnerGuard)
-    async deleteDishList(@Body() {dishListId}: {dishListId: number}) {
+    async deleteDishList(@Param('id') dishListId: number) {
         return await this.dishListService.deleteDishList(dishListId);
     }
     
-    @Post()
+    @Post('id/:id/dish')
     @UseGuards(JwtGuard, DishListOwnerGuard)
-    async addDishInList(@Body() {dishListId, dishId, meal}: { dishListId: number, dishId: number, meal: Meal }) {
+    async addDishInList(@Body() {dishId, meal}: { dishId: number, meal: Meal }, @Param('id') dishListId: number) {
         return await this.dishListService.addDishInList(dishListId, dishId, meal);
     }
 
-    @Delete()
+    @Delete('id/:id/dish')
     @UseGuards(JwtGuard, DishListOwnerGuard)
-    async removeDishFromList(@Body() {dishListId, dishId, meal}: { dishListId: number, dishId: number, meal: Meal }) {
+    async removeDishFromList(@Body() {dishId, meal}: { dishId: number, meal: Meal }, @Param('id') dishListId: number) {
         return await this.dishListService.renoveDishFromList(dishListId, dishId, meal);
     }
 

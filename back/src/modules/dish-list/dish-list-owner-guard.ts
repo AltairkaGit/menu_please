@@ -9,9 +9,9 @@ export class DishListOwnerGuard implements CanActivate {
 ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const { user, body } = context.switchToHttp().getRequest();
-    const { dishListId } = body;
-    const dishList = await this.dishListService.getDishList(dishListId);
+    const { user, body, params } = context.switchToHttp().getRequest();
+    const dishListId = params.id ?? body.dishListId;
+    const dishList = await this.dishListService.getPlainDishList(dishListId);
     if (!dishList) throw new BadRequestException(AppError.NO_DISH_LIST)
     if (dishList.ownerId != user.userId) return false;
     return true;

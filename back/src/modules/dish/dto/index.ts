@@ -30,6 +30,12 @@ export class DishDto {
     cookerId: number
 }
 
+export class DishPreviewDto {
+    id: number
+    name: string
+    picture: string
+}
+
 export class CreateDishFormDto {
     @IsString()
     kind: string
