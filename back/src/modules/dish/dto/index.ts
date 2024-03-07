@@ -1,8 +1,8 @@
-import { ArrayMinSize, IsArray, IsEnum, IsNumber, IsNumberString, IsString } from "class-validator"
+import { ArrayMinSize, IsArray, IsNumberString, IsString } from "class-validator"
 import { Dish, Meal } from "@modules/dish/model/dish.model"
 
 export class DishDto {
-    constructor (dish: Dish, cookerId: number, categories: Meal[], tutorials?: string[]) {
+    constructor (dish: Dish, categories: Meal[], tutorial: string) {
         this.id = dish.id
         this.kind = dish.kind
         this.name = dish.name
@@ -11,10 +11,10 @@ export class DishDto {
         this.fats = dish.fats
         this.carbohydrates = dish.carbohydrates
         this.recipe = dish.recipe;
-        this.tutorials = tutorials;
+        this.tutorial = tutorial;
         this.categories = categories.map(meal => meal.toLocaleString())
         this.calories = dish.fats * 9 + (dish.carbohydrates + dish.proteins) * 4
-        this.cookerId = cookerId
+        this.cookerId = dish.cookerId
     }
     id: number
     kind: string
@@ -25,7 +25,7 @@ export class DishDto {
     fats: number
     carbohydrates: number
     recipe: string
-    tutorials: string[] | undefined
+    tutorial?: string | undefined
     categories: string[]
     cookerId: number
 }
@@ -49,75 +49,10 @@ export class CreateDishFormDto {
     @IsString()
     recipe: string
     
-    tutorials?: string[]
+    tutorial: string
 
     @IsArray()
     @IsString({each: true})
     @ArrayMinSize(1)
     categories: Meal[]
-}
-
-export class UpdateDishGeneralDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    picture: string
-
-    @IsString()
-    name: string
-
-    @IsNumber()
-    proteins: number
-
-    @IsNumber()
-    fats: number
-
-    @IsNumber()
-    carbohydrates: number
-}
-
-export class UpdateDishRecipeDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    recipe: string
-}
-
-export class AddDishTutorialDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    url: string
-}
-
-export class RemoveDishTutorialDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    url: string
-}
-
-export class AddDishCategoryDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    category: Meal
-}
-
-export class RemoveDishCategoryDto {
-    @IsNumber()
-    id: number
-
-    @IsString()
-    category: Meal
-}
-
-export class DeleteDishDto {
-    @IsNumber()
-    id: number
 }

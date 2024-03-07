@@ -1,21 +1,29 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadService } from '../upload/upload.service';
-import { CreateDishFormDto, DishDto, UpdateDishGeneralDto } from './dto';
+import { CreateDishFormDto, DishDto } from './dto';
 import { Dish, Meal } from './model/dish.model';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectConnection, InjectModel } from '@nestjs/sequelize';
 import { Tutorial } from './model/tutorial.model';
 import { DishCategory } from './model/dish-category.model';
 import { AppError } from '@src/common/errors';
 import { Op } from 'sequelize';
+import { Connection } from 'sequelize/types/dialects/abstract/connection-manager';
 
 @Injectable()
 export class DishService {
     constructor(
         private readonly uploadService: UploadService,
+        @InjectConnection() private readonly db: Connection,
         @InjectModel(Dish) private readonly dishRepository: typeof Dish,
         @InjectModel(DishCategory) private readonly dishCategoryRepository: typeof DishCategory,
         @InjectModel(Tutorial) private readonly tutorialRepository: typeof Tutorial
     ) {}
+
+    async getDishDto(dish: Dish) {
+        const categories = (await this.dishCategoryRepository.findAll({where: {dishId: dish.id}})).map(m => m.meal);
+        const tutorials = (await this.tutorialRepository.findAll({where: {dishId: dish.id}})).map(t => t.url);
+        return new DishDto(dish, categories, tutorials[0]);
+    }
 
     async getDish(id: number) : Promise<Dish> {
         const dish = await this.dishRepository.findByPk(id);
@@ -24,21 +32,17 @@ export class DishService {
     }
 
     async getCookerDishes(cookerId: number) : Promise<Dish[]> {
-        return await this.dishRepository.findAll({
-            where: {
-                cookerId
-            }
-        });
+        return await this.dishRepository.findAll({where: { cookerId } });
     }
 
-    async getDishes({ take, skip, name, kind, ord, dir, meal}: {
+    async getDishes({ take, skip, meal, ord = 'name', dir = 'asc', name = '', kind = ''}: {
         take: number, 
-        skip: number, 
-        kind: string
-        name: string, 
-        ord: keyof Dish,
-        dir: 'asc' | 'desc',
+        skip: number,
         meal: Meal
+        kind?: string
+        name?: string, 
+        ord?: keyof Dish,
+        dir?: 'asc' | 'desc',        
     }) : Promise<{rows: Dish[], count: number}> {
         return await this.dishRepository.findAndCountAll({
             include: [{
@@ -57,7 +61,7 @@ export class DishService {
         })
     }
 
-    async createDish(picture: Express.Multer.File, {categories, tutorials, ...body}: CreateDishFormDto, cookerId: number) : Promise<DishDto> {
+    async createDish(picture: Express.Multer.File, {categories, tutorial, ...body}: CreateDishFormDto, cookerId: number) : Promise<Dish> {
         const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
         const dish = await this.dishRepository.create({
             picture: url,
@@ -70,8 +74,28 @@ export class DishService {
             cookerId: cookerId,            
         });
         await Promise.all(categories.map(meal => this.addDishCategory(dish, meal)));
-        tutorials && await Promise.all(tutorials.map(url => this.addTutorial(dish, url)));
-        return new DishDto(dish, cookerId, categories, tutorials);
+        tutorial && await this.addTutorial(dish, tutorial);
+        return dish;
+    }
+
+    async updateDish(picture: Express.Multer.File, {categories, tutorial, ...body}: CreateDishFormDto, cookerId: number, dishId: number) : Promise<Dish> {
+        const dish = await this.dishRepository.findOne({where: {id: dishId}});
+        if (!dish) throw new BadRequestException(AppError.NO_DISH);
+        const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
+        dish.picture = url;
+        dish.kind = body.kind;
+        dish.name = body.name;
+        dish.proteins = Number(body.proteins);
+        dish.fats = Number(body.fats);
+        dish.carbohydrates = Number(body.carbohydrates);
+        dish.recipe = body.recipe;
+        dish.cookerId = cookerId;
+        await dish.save();
+        const dishCategories = await this.dishCategoryRepository.findAll({where: {dishId}});
+        await Promise.all(dishCategories?.map(c => this.removeDishCategory(dish, c.meal)));
+        await Promise.all(categories?.map(meal => this.addDishCategory(dish, meal)));
+        await this.updateTutorial(dish, tutorial);
+        return dish;
     }
 
     async removeDish(dish: Dish) : Promise<void> {
@@ -82,18 +106,34 @@ export class DishService {
         });
     }
 
-    async addTutorial(dish: Dish, url: string) : Promise<Tutorial> {
-        return this.tutorialRepository.create({
+    async addTutorial(dish: Dish, url: string) : Promise<Dish> {
+        if (url) await this.tutorialRepository.create({
             dishId: dish.id,
             url
         });
+        return dish.save();
     }
 
-    async addDishCategory(dish: Dish, meal: Meal) : Promise<DishCategory> {
-        return this.dishCategoryRepository.create({
+    async updateTutorial(dish: Dish, url: string) : Promise<Dish> {
+        const tutorial = await this.tutorialRepository.findOne({where: {dishId: dish.id}});
+        if (!tutorial) return this.addTutorial(dish, url);
+        if (url) {
+            tutorial.url = url;
+            tutorial.save();
+        }
+        else await this.removeTutorial(dish, url);
+        return dish.save();
+        
+    }
+
+    async addDishCategory(dish: Dish, meal: Meal) : Promise<Dish> {
+        const category = await this.dishCategoryRepository.findOne({where: {dishId: dish.id, meal}});
+        if (category) throw new BadRequestException(AppError.DISH_ALREADY_HAS_THE_MEAL);
+        await this.dishCategoryRepository.create({
             dishId: dish.id,
             meal: meal.toLocaleString()
         });
+        return dish.save();
     }
 
     async removeTutorial(dish: Dish, url: string) : Promise<void> {
@@ -103,7 +143,6 @@ export class DishService {
                 url
             }
         });
-        return
     }
 
     async removeDishCategory(dish: Dish, meal: Meal) : Promise<void> {
@@ -113,20 +152,6 @@ export class DishService {
                 meal
             }
         });
-    }
-
-    async updateDishGeneral(dish: Dish, dto: UpdateDishGeneralDto) : Promise<Dish> {
-        dish.picture = dto.picture;
-        dish.name = dto.name;
-        dish.proteins = dto.proteins;
-        dish.fats = dto.fats;
-        dish.carbohydrates = dto.carbohydrates;
-        return await dish.save();
-    }
-
-    async updateDishRecipe(dish: Dish, recipe: string) : Promise<Dish> {
-        dish.recipe = recipe;
-        return await dish.save();
     }
 
 }
