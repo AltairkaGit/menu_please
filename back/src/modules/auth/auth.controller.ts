@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto';
-import { LoginUserDto } from './dto';
+import { LoginUserDto, UserDto } from './dto';
 import { Response } from 'express';
 
 @Controller('')
@@ -15,7 +15,7 @@ export class AuthController {
         const { user, token } = await this.authService.registerUser(dto);
         res.cookie('token', token, {httpOnly: true});
         res.status(200);
-        res.send(user);
+        res.send(new UserDto(user));
     }
 
     @Post('register/cooker')
@@ -23,7 +23,7 @@ export class AuthController {
         const { user: cooker, token } = await this.authService.registerCooker(dto);
         res.cookie('token', token, {httpOnly: true});
         res.status(200);
-        res.send(cooker);
+        res.send(new UserDto(cooker));
     }
 
     @Post('login/user')
@@ -31,7 +31,7 @@ export class AuthController {
         const { user, token } = await this.authService.loginUser(dto);
         res.cookie('token', token, {httpOnly: true});
         res.status(200);
-        res.send(user);
+        res.send(new UserDto(user));
     }
 
     @Post('login/cooker')
@@ -39,6 +39,13 @@ export class AuthController {
         const { user: cooker, token } = await this.authService.loginCooker(dto);
         res.cookie('token', token, {httpOnly: true});
         res.status(200);
-        res.send(cooker);
+        res.send(new UserDto(cooker));
+    }
+
+    @Delete('logout')
+    async logout(@Res() res: Response) {
+        res.clearCookie('token');
+        res.status(200);
+        res.send();
     }
 }
