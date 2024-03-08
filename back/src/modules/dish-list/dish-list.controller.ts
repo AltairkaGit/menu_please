@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { DishListService } from './dish-list.service';
 import { JwtGuard } from '@src/guards/jwt-guard';
 import { DishListOwnerGuard } from './dish-list-owner-guard';
@@ -45,10 +45,16 @@ export class DishListController {
         return await this.dishListService.addDishInList(dishListId, dishId, meal);
     }
 
+    @Put('id/:id/dish')
+    @UseGuards(JwtGuard, DishListOwnerGuard)
+    async changeDishAmount(@Body() {dishId, meal, amount}: { dishId: number, meal: Meal, amount: number }, @Param('id') dishListId: number) {
+        return await this.dishListService.changeAmount(dishListId, dishId, meal, amount);
+    }
+
     @Delete('id/:id/dish')
     @UseGuards(JwtGuard, DishListOwnerGuard)
     async removeDishFromList(@Body() {dishId, meal}: { dishId: number, meal: Meal }, @Param('id') dishListId: number) {
-        return await this.dishListService.renoveDishFromList(dishListId, dishId, meal);
+        return await this.dishListService.removeDishFromList(dishListId, dishId, meal);
     }
 
 }

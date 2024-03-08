@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadService } from '../upload/upload.service';
-import { CreateDishFormDto, DishDto } from './dto';
+import { AmountedDishDto, CreateDishFormDto, DishDto } from './dto';
 import { Dish, Meal } from './model/dish.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Tutorial } from './model/tutorial.model';
@@ -19,15 +19,29 @@ export class DishService {
         @InjectModel(Tutorial) private readonly tutorialRepository: typeof Tutorial
     ) {}
 
-    async getDishDto(dish: Dish) {
+    private async getDishDtoData(dish: Dish) {
         const categories = (await this.dishCategoryRepository.findAll({where: {dishId: dish.id}})).map(m => m.meal);
         const tutorials = (await this.tutorialRepository.findAll({where: {dishId: dish.id}})).map(t => t.url);
         const cooker = await this.userService.findUserById(dish.cookerId);
+        return {categories, tutorials, cooker};
+    }
+
+    async getDishDto(dish: Dish) {
+        const {categories, tutorials, cooker} = await this.getDishDtoData(dish);
         return new DishDto(dish, categories, tutorials[0], cooker);
+    }
+
+    async getAmountedDishDto(dish: Dish, amount = 1) {
+        const {categories, tutorials, cooker} = await this.getDishDtoData(dish);
+        return new AmountedDishDto(dish, categories, tutorials[0], cooker, amount);
     }
 
     async getDishesDto(dishes: Dish[]) {
         return Promise.all(dishes.map(d => this.getDishDto(d)));
+    }
+
+    async getAmountedDishesDto(dishes: Dish[]) {
+        return Promise.all(dishes.map(d => this.getAmountedDishDto(d)));
     }
 
     async getDish(id: number) : Promise<Dish> {
@@ -59,8 +73,10 @@ export class DishService {
                 where: { meal }
             }],
             where: {
-                kind: {[Op.like]: '%' + kind + '%'},
-                name: {[Op.like]: '%' + name + '%'},
+                [Op.and]: {
+                    kind: {[Op.like]: '%' + kind + '%'},
+                    name: {[Op.like]: '%' + name + '%'},
+                }
             },
             order: [[
                 ord, dir

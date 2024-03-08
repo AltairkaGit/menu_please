@@ -8,4 +8,5 @@ export const AppError = {
     NO_DISH_LIST: 'this dish list does not exist',
     NO_DISH_IN_LIST_AS_MEAL: 'this dish is absent as the meal',
     DISH_ALREADY_IN_LIST_AS_MEAL: 'this dish is already in the list as the meal',
+    NOT_POSITIVE_MEAL_AMOUNT: 'the meal amount can be positive only',
 }

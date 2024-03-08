@@ -6,7 +6,7 @@ import { DishListDishes } from './model/dish-list-dishes.model';
 import { Meal } from '../dish/model/dish.model';
 import { DishListDto } from './dto';
 import { DishService } from '../dish/dish.service';
-import { DishDto } from '../dish/dto';
+import { AmountedDishDto, DishDto } from '../dish/dto';
 
 @Injectable()
 export class DishListService {
@@ -30,9 +30,9 @@ export class DishListService {
         const unique = new Set<number>();
         rows.forEach(r => { unique.add(r.dishId) });
         const dishes = await this.dishService.getDishesByIds([...unique.values()]);
-        const dishesDto = await this.dishService.getDishesDto(dishes);
+        const dishesDto = await this.dishService.getAmountedDishesDto(dishes);
         const view = new Map(dishesDto.map(dto => [dto.id, dto]));
-        const meal = new Map<Meal, DishDto[]>();
+        const meal = new Map<Meal, AmountedDishDto[]>();
         rows.forEach(row => {
             !meal.has(row.meal) && meal.set(row.meal, []);
             const dto = view.get(row.dishId)
@@ -58,24 +58,38 @@ export class DishListService {
     }
 
     async addDishInList(dishListId: number, dishId: number, meal: Meal) {
-        this.dishService.getDish(dishId);
-        const record = await this.dishListDishesRepository.findOne({
+        let record = await this.dishListDishesRepository.findOne({
             where: {dishListId, dishId, meal}
         });
         if (record) throw new BadRequestException(AppError.DISH_ALREADY_IN_LIST_AS_MEAL);
-        return await this.dishListDishesRepository.create({
+        record = await this.dishListDishesRepository.create({
             dishListId,
             dishId,
-            meal
+            meal,
+            amount: 1
         });
+        const dish = await this.dishService.getDish(dishId);
+        return this.dishService.getAmountedDishDto(dish, record.amount);
     }
-
-    async renoveDishFromList(dishListId: number, dishId: number, meal: Meal) {
+    
+    async changeAmount(dishListId: number, dishId: number, meal: Meal, amount: number) {
         const record = await this.dishListDishesRepository.findOne({
             where: {dishListId, dishId, meal}
         });
         if (!record) throw new BadRequestException(AppError.NO_DISH_IN_LIST_AS_MEAL);
-        return await this.dishListDishesRepository.destroy({
+        if (amount <= 0) throw new BadRequestException(AppError.NOT_POSITIVE_MEAL_AMOUNT);
+        record.amount = amount;
+        await record.save();
+        const dish = await this.dishService.getDish(dishId);
+        return this.dishService.getAmountedDishDto(dish, record.amount);
+    }
+
+    async removeDishFromList(dishListId: number, dishId: number, meal: Meal) {
+        const record = await this.dishListDishesRepository.findOne({
+            where: {dishListId, dishId, meal}
+        });
+        if (!record) throw new BadRequestException(AppError.NO_DISH_IN_LIST_AS_MEAL);
+        await this.dishListDishesRepository.destroy({
             where: {dishListId, dishId, meal}
         });
     }

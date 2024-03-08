@@ -30,7 +30,7 @@ import { DishCategory } from '../dish/model/dish-category.model';
         database: configService.get('db_name'),
         username: configService.get('db_user'),
         password: configService.get('db_password'),
-        synchronize: true,
+        synchronize: false,        
         autoLoadModels: true,
         schema: 'please',
         models: [
