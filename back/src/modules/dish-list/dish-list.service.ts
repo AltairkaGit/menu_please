@@ -4,9 +4,9 @@ import { DishList } from './model/dish-list.model';
 import { AppError } from '@src/common/errors';
 import { DishListDishes } from './model/dish-list-dishes.model';
 import { Meal } from '../dish/model/dish.model';
-import { DishListDto, MealDishes } from './dto';
+import { DishListDto } from './dto';
 import { DishService } from '../dish/dish.service';
-import { DishPreviewDto } from '../dish/dto';
+import { DishDto } from '../dish/dto';
 
 @Injectable()
 export class DishListService {
@@ -30,25 +30,17 @@ export class DishListService {
         const unique = new Set<number>();
         rows.forEach(r => { unique.add(r.dishId) });
         const dishes = await this.dishService.getDishesByIds([...unique.values()]);
-        const dishesPreviews = await this.dishService.getDishesPreviewDto(dishes);
-        const view = new Map(dishesPreviews.map(preview => [preview.id, preview]));
-        const meal = new Map<Meal, (DishPreviewDto)[]>();
+        const dishesDto = await this.dishService.getDishesDto(dishes);
+        const view = new Map(dishesDto.map(dto => [dto.id, dto]));
+        const meal = new Map<Meal, DishDto[]>();
         rows.forEach(row => {
-            if (!meal.has(row.meal)) meal.set(row.meal, []);
-            const preview = view.get(row.dishId);
-            if (preview) meal.get(row.meal)?.push(preview);
+            !meal.has(row.meal) && meal.set(row.meal, []);
+            const dto = view.get(row.dishId)
+            dto && meal.get(row.meal)?.push(dto);
         });
-        const mealDishes : MealDishes[] = [];
-        [...meal.keys()].forEach(k => {
-            const dishes = meal.get(k)
-            if (dishes) {
-                const row = new MealDishes()
-                row.meal = k;
-                row.dishes = dishes;
-                mealDishes.push(row)
-            }            
-        })
-        res.mealDishes = mealDishes;
+        res.breakfast = meal.get(Meal.breakfast) ?? []
+        res.lunch = meal.get(Meal.lunch) ?? []
+        res.dinner = meal.get(Meal.dinner) ?? []
         return res;
     }
 

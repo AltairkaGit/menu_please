@@ -10,9 +10,10 @@ import { Tutorial } from './model/tutorial.model';
 import { User } from '../user/model/user.model';
 import { DishCategory } from './model/dish-category.model';
 import { DishOwnerGuard } from './dish-owner-guard';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Dish, DishCategory, DishList, DishListDishes, Tutorial, User]), UploadModule],
+  imports: [UserModule, SequelizeModule.forFeature([Dish, DishCategory, DishList, DishListDishes, Tutorial, User]), UploadModule],
   providers: [DishService, DishOwnerGuard],
   controllers: [DishController],
   exports: [DishService]

@@ -1,17 +1,19 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadService } from '../upload/upload.service';
-import { CreateDishFormDto, DishDto, DishPreviewDto } from './dto';
+import { CreateDishFormDto, DishDto } from './dto';
 import { Dish, Meal } from './model/dish.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Tutorial } from './model/tutorial.model';
 import { DishCategory } from './model/dish-category.model';
 import { AppError } from '@src/common/errors';
 import { Op } from 'sequelize';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class DishService {
     constructor(
         private readonly uploadService: UploadService,
+        private readonly userService: UserService,
         @InjectModel(Dish) private readonly dishRepository: typeof Dish,
         @InjectModel(DishCategory) private readonly dishCategoryRepository: typeof DishCategory,
         @InjectModel(Tutorial) private readonly tutorialRepository: typeof Tutorial
@@ -20,23 +22,12 @@ export class DishService {
     async getDishDto(dish: Dish) {
         const categories = (await this.dishCategoryRepository.findAll({where: {dishId: dish.id}})).map(m => m.meal);
         const tutorials = (await this.tutorialRepository.findAll({where: {dishId: dish.id}})).map(t => t.url);
-        return new DishDto(dish, categories, tutorials[0]);
+        const cooker = await this.userService.findUserById(dish.cookerId);
+        return new DishDto(dish, categories, tutorials[0], cooker);
     }
 
     async getDishesDto(dishes: Dish[]) {
         return Promise.all(dishes.map(d => this.getDishDto(d)));
-    }
-
-    async getDishPreviewDto(dish: Dish) {
-        const res = new DishPreviewDto();
-        res.id = dish.id;
-        res.name = dish.name;
-        res.picture = dish.picture;
-        return res;
-    }
-
-    async getDishesPreviewDto(dishes: Dish[]) {
-        return Promise.all(dishes.map(d => this.getDishPreviewDto(d)));
     }
 
     async getDish(id: number) : Promise<Dish> {

@@ -1,12 +1,8 @@
-import { DishPreviewDto } from "@src/modules/dish/dto"
-import { Meal } from "@src/modules/dish/model/dish.model"
-
-export class MealDishes {
-    meal: Meal
-    dishes: DishPreviewDto[]
-}
+import { DishDto } from "@src/modules/dish/dto"
 
 export class DishListDto {
     id: number
-    mealDishes: MealDishes[]
+    breakfast: DishDto[]
+    lunch: DishDto[]
+    dinner: DishDto[]
 }

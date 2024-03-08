@@ -3,6 +3,8 @@ import { DishListService } from './dish-list.service';
 import { JwtGuard } from '@src/guards/jwt-guard';
 import { DishListOwnerGuard } from './dish-list-owner-guard';
 import { Meal } from '../dish/model/dish.model';
+import { Roles } from '@src/guards/roles.decorator';
+import { Role } from '@src/guards/role.enum';
 
 @Controller('dish-list')
 export class DishListController {
@@ -24,6 +26,7 @@ export class DishListController {
     }
 
     @Post()
+    @Roles(Role.User)
     @UseGuards(JwtGuard)
     async createDishList(@Req() req: any) {
         const { user } = req;

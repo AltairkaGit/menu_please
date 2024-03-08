@@ -1,8 +1,18 @@
 import { ArrayMinSize, IsArray, IsNumberString, IsString } from "class-validator"
 import { Dish, Meal } from "@modules/dish/model/dish.model"
+import { User } from "@src/modules/user/model/user.model"
+
+export class CookerDto {
+    constructor(cooker: User) {
+        this.id = cooker.id;
+        this.name = cooker.username;
+    }
+    id: number
+    name: string
+}
 
 export class DishDto {
-    constructor (dish: Dish, categories: Meal[], tutorial: string) {
+    constructor (dish: Dish, categories: Meal[], tutorial: string, cooker: User) {
         this.id = dish.id
         this.kind = dish.kind
         this.name = dish.name
@@ -14,7 +24,7 @@ export class DishDto {
         this.tutorial = tutorial;
         this.categories = categories.map(meal => meal.toLocaleString())
         this.calories = dish.fats * 9 + (dish.carbohydrates + dish.proteins) * 4
-        this.cookerId = dish.cookerId
+        this.cooker = new CookerDto(cooker)
     }
     id: number
     kind: string
@@ -27,13 +37,7 @@ export class DishDto {
     recipe: string
     tutorial?: string | undefined
     categories: string[]
-    cookerId: number
-}
-
-export class DishPreviewDto {
-    id: number
-    name: string
-    picture: string
+    cooker: CookerDto
 }
 
 export class CreateDishFormDto {
