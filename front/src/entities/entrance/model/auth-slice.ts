@@ -1,7 +1,7 @@
 import { authService } from "@features/auth/service"
 import { createSlice } from "@reduxjs/toolkit"
 import { RootState } from "@shared/store"
-import { UserData } from "./auth-api"
+import { UserData } from "../api"
 import { Role } from "@shared/user-roles"
 
 interface AuthState {

@@ -9,7 +9,7 @@ const LabelLogo = () => {
 
 export const Header = ({LeftLabel, RightLabel} : {LeftLabel: ReactNode, RightLabel: ReactNode}) => {
     return (
-        <motion.nav className={clsx("w-full absolute top-0 left-0 px-24 pt-8 pb-2 flex", !LeftLabel && "pl-[20.5rem]", !RightLabel && "pr-[20.5rem]")} >
+        <motion.nav className={clsx("w-full absolute top-0 left-0 px-24 pt-8 pb-2 flex", !LeftLabel && "lg:pl-[20.5rem]", !RightLabel && "lg:pr-[20.5rem]")} >
             {LeftLabel}
             <LabelLogo />
             {RightLabel}

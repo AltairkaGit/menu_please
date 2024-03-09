@@ -18,8 +18,7 @@ export const LabelProfile = ({Icon} : {Icon : ReactNode}) => {
     return <Label className="light-block" 
         corners="full" 
         leftButton={<LogoutButton />} 
-        rightButton={<ProfileButton 
-        Icon={Icon} />} >
+        rightButton={<ProfileButton Icon={Icon} />}>
         {name}
     </Label>
 }

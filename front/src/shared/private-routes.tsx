@@ -5,12 +5,9 @@ import { useSelector } from "react-redux"
 import { Navigate, Outlet } from "react-router-dom"
 
 export const PrivateRoutes = () => {
-    const {data, error, isLoading} = useRetreiveUserQuery()
+    useRetreiveUserQuery()
+    const isAuth = useSelector(selectIsAuth)
     const authCookie = Cookies.get('auth')
     if (authCookie == "true") return <Outlet/>
-    const isAuth = useSelector(selectIsAuth)
-    
-    return (
-        isAuth ? <Outlet/> : <Navigate to='/'/>
-    )
+    return isAuth ? <Outlet/> : <Navigate to='/'/>
 }

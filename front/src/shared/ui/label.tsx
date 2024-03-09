@@ -12,7 +12,7 @@ export const Label = ({children, leftButton, rightButton, className, corners = '
 }) => {
 
     return <Block corners={corners} className={clsx(
-        "max-w-[20.5rem] h-[3.625rem] text-st overflow-hidden flex items-center",
+        "text-st lg:w-[25vw] md:text-2xl h-[3.625rem] text overflow-hidden flex items-center xl:text-st xl:w-[20.5rem]",
         !leftButton && "pl-[3.625rem]",
         !rightButton && "pr-[3.625rem]",
         className)}

@@ -12,7 +12,7 @@ export const Button = ({ onClick, children, className, whileTap, disabled = fals
     disabled?: boolean
 }) => {
     return <Block corners={corners} className={clsx("w-[3.625rem] h-[3.625rem] flex items-center justify-center", className)}>
-        <motion.button disabled={disabled} onClick={onClick} whileTap={whileTap ?? {scale: 0.8}}>
+        <motion.button disabled={disabled} onClick={onClick} whileTap={whileTap ?? {scale: 0.8}} className="w-full h-full flex justify-center items-center">
             {children}
         </motion.button>
     </Block>

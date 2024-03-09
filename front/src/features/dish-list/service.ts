@@ -2,17 +2,11 @@ import { Credentials, RegisterData, UserData } from '@entities/entrance/api'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createUrl } from '@shared/base-api'
 
-export const authService = createApi({
-    reducerPath: 'service/auth',
-    baseQuery: fetchBaseQuery({ baseUrl: createUrl(), credentials: "include" }),
-    endpoints: (builder) => ({
-        retreiveUser: builder.query<UserData, void>({
-            query: () => ({
-                url: 'user',
-                method: 'GET'
-            })
-        }),
-        loginUser: builder.mutation<UserData, Credentials>({
+export const dishListService = createApi({
+    reducerPath: 'service/dish-list',
+    baseQuery: fetchBaseQuery({ baseUrl: createUrl('dish-list'), credentials: "include" }),
+    endpoints: (builder) => ({        
+        getAll: builder.mutation<UserData, Credentials>({
             query: (credentials) => ({
                 url: 'login/user',
                 method: 'POST',
@@ -22,7 +16,7 @@ export const authService = createApi({
                 },
             })
         }),
-        loginCooker: builder.mutation<UserData, Credentials>({
+        create: builder.mutation<UserData, Credentials>({
             query: (credentials) => ({
                 url: 'login/cooker',
                 method: 'POST',
@@ -32,13 +26,13 @@ export const authService = createApi({
                 },
             })
         }),
-        logout: builder.mutation<void, void>({
+        delete: builder.mutation<void, void>({
             query: () => ({
                 url: 'logout',
                 method: 'DELETE',
             })
         }),
-        registerUser: builder.mutation<UserData, RegisterData>({
+        addDish: builder.mutation<UserData, RegisterData>({
             query: (data) => ({
                 url: 'register/user',
                 method: 'POST',
@@ -48,7 +42,7 @@ export const authService = createApi({
                 },
             })
         }),
-        registerCooker: builder.mutation<UserData, RegisterData>({
+        deleteDish: builder.mutation<UserData, RegisterData>({
             query: (data) => ({
                 url: 'register/user',
                 method: 'POST',
@@ -58,14 +52,19 @@ export const authService = createApi({
                 },
             })
         }),
+        changeAmount: builder.mutation<UserData, RegisterData>({
+            query: (data) => ({
+                url: 'register/user',
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+        })
     })
 })
 
-export const { 
-    useLoginUserMutation, 
-    useRegisterUserMutation,
-    useLoginCookerMutation,
-    useRegisterCookerMutation,
-    useLogoutMutation, 
-    useRetreiveUserQuery,
-} = authService
+export const {
+
+} = dishListService
