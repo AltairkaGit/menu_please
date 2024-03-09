@@ -1,7 +1,9 @@
+import { selectUsername } from "@entities/entrance/model/auth-slice"
+import { LogoutButton } from "@features/auth/ui/logout-button"
 import { Button } from "@shared/ui/button"
 import { Label } from "@shared/ui/label"
-import { Logout } from "@static/icons/logout"
 import { ReactNode } from "react"
+import { useSelector } from "react-redux"
 
 const ProfileButton = ({Icon} : {Icon : ReactNode}) => {
     const onClick = () => {}
@@ -10,15 +12,8 @@ const ProfileButton = ({Icon} : {Icon : ReactNode}) => {
     </Button>
 }
 
-const LogoutButton = () => {
-    const onClick = () => {}
-    return <Button onClick={onClick} corners="full" className="light-block">
-        <Logout />
-    </Button>
-}
-
 export const LabelProfile = ({Icon} : {Icon : ReactNode}) => {
-    const name = 'Кирилл'
+    const name = useSelector(selectUsername)
     
     return <Label className="light-block" 
         corners="full" 

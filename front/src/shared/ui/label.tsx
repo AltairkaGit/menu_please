@@ -1,26 +1,26 @@
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import { ReactNode } from "react"
-import { Corners, TCorners } from "./corners"
+import { Block, Corners } from "./block"
 
-export const Label = ({children, leftButton, rightButton, className, onClick, corners = ''} : {
+export const Label = ({children, leftButton, rightButton, className, corners = ''} : {
     children: ReactNode,
     leftButton?: ReactNode,
     rightButton?: ReactNode,
-    corners?: TCorners,
+    corners?: Corners,
     className?: string,
-    onClick?: () => void
 }) => {
-    return <motion.div onClick={onClick} className={clsx(className,
-        "w-[20.5rem] h-[3.625rem] text-st overflow-hidden flex items-center",
+
+    return <Block corners={corners} className={clsx(
+        "max-w-[20.5rem] h-[3.625rem] text-st overflow-hidden flex items-center",
         !leftButton && "pl-[3.625rem]",
         !rightButton && "pr-[3.625rem]",
-        Corners[corners], className)}
+        className)}
     >
         {leftButton}
         <motion.div className="flex-1 text-center">
             {children}
         </motion.div>
         {rightButton}
-    </motion.div>
+    </Block>
 }

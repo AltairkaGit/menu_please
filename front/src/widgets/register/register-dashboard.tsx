@@ -1,20 +1,11 @@
-import { SubmitHandler, useForm } from "react-hook-form"
-import { RegisterForm } from "@entities/entrance/ui/register-form"
 import { DashboardLoginLink } from "@entities/entrance/ui/dashboard-login-link"
 import { StudioRegisterLink } from "@entities/entrance/ui/studio-register-link"
+import { RegisterForm } from "@features/auth/ui/register-form"
+import { Role } from "@shared/user-roles"
 
-type Inputs = {
-    name: string,
-    email: string,
-    password: string,
-}
-
-export const RegisterDashboard = () => {
-    const {register, handleSubmit, formState: { errors }} = useForm<Inputs>()
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
-
-    return <RegisterForm title="Регистрация" register={register} onSubmit={handleSubmit(onSubmit)} >
+export const RegisterDashboard = () => (
+    <RegisterForm role={Role.user}>
         <DashboardLoginLink />
         <StudioRegisterLink />
     </RegisterForm>
-}
+)
