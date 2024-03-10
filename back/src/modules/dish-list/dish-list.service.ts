@@ -54,7 +54,7 @@ export class DishListService {
     }
 
     async deleteDishList(dishListId: number) {
-        return await this.dishListRepository.destroy({where: {id: dishListId}});
+        await this.dishListRepository.destroy({where: {id: dishListId}});
     }
 
     async addDishInList(dishListId: number, dishId: number, meal: Meal) {
