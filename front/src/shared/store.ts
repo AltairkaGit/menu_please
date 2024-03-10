@@ -1,11 +1,13 @@
+import dishListSlice from "@entities/dish-list/model/dishListSlice"
 import authSlice from "@entities/entrance/model/auth-slice"
 import { authService } from "@features/auth/service"
+import { dishListService } from "@features/dish-list/service"
 import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 
 const rootReducer = combineSlices(
-  authService, authSlice
+  authService, authSlice, dishListService, dishListSlice
 )
 export type RootState = ReturnType<typeof rootReducer>
 
@@ -15,6 +17,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
     middleware: getDefaultMiddleware => {
       return getDefaultMiddleware()
         .concat(authService.middleware)
+        .concat(dishListService.middleware)
     },
     preloadedState,
   })
