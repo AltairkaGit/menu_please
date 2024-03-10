@@ -12,7 +12,7 @@ const CornersMap = {
 export type Corners = ''| 'lg' | '3xl' | 'full'
 
 export const Block = ({ children, className, whileTap, corners = ''} : {
-    children: ReactNode,
+    children?: ReactNode,
     className?: string,
     corners?: Corners,
     whileTap?: TargetAndTransition
