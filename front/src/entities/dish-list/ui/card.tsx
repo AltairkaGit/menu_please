@@ -8,6 +8,8 @@ import { useInterval } from 'usehooks-ts'
 import { Ratio } from '@entities/dish/ui/ratio'
 import { Button } from '@shared/ui/button'
 import { Cross } from '@static/icons/cross'
+import { MealLabel } from './meal-label'
+import clsx from 'clsx'
 
 const transformInSequence = (dishList: DishList) => {
     return [
@@ -17,10 +19,10 @@ const transformInSequence = (dishList: DishList) => {
     ]
 }
 
-export const DishListCard = ({dishList, deleteList}: {dishList: DishList, deleteList: () => any}) => {
+export const DishListCardUI = ({dishList, deleteList, order}: {dishList: DishList, deleteList: () => any, order: number}) => {
     const sequence = useMemo(() => transformInSequence(dishList), [dishList])
     const totalCalories = useMemo(() => calcTotalCalories(dishList), [dishList])
-    
+
     const [meal, setMeal] = useState<Meal>(sequence[0].meal)
     const [i, setI] = useState<number>(0)
     useInterval(() => {
@@ -30,18 +32,18 @@ export const DishListCard = ({dishList, deleteList}: {dishList: DishList, delete
             if (sequence[prev].meal != sequence[next].meal) setMeal(sequence[next].meal)
             return next
         })
-    }, 4000)
+    }, 10000)
 
     const content = sequence ? <>
         <motion.div className='flex gap-7'>
             <Block className='dark-block w-full h-8 md:w-8 md:h-full' />
             <AnimatePresence mode='wait'>
                 <motion.img key={i} src={sequence[i].dish.picture} variants={{in: {opacity: 1, x: 0}, out: {opacity: 0, x: "-8%"}}} 
-                    initial="out" animate="in" exit="out" layout transition={{duration: 1.25}} 
+                    initial="out" animate="in" exit="out" layout transition={{duration: 1, delay: 0.2 * order}} 
                     className="w-44 h-44 md:w-64 md:h-64 lg:w-80 lg:h-80"/>
             </AnimatePresence>
             <motion.div key={"summary"} className="p-3 flex flex-col justify-between w-full md:w-80 mb-8">
-                <motion.div className="mt-3 text-3xl"> Ваше меню: </motion.div>
+                <motion.div className="mt-3 text-3xl">Ваше меню:</motion.div>
                 <motion.div className="text-2xl">
                     <motion.div className="mb-3"> Калорийность: {totalCalories} </motion.div>
                     <Ratio proteins={sequence[i].dish.proteins.toString() + '%'} 
@@ -49,10 +51,21 @@ export const DishListCard = ({dishList, deleteList}: {dishList: DishList, delete
                         carbo={sequence[i].dish.carbohydrates.toString() + '%'}
                     />
                 </motion.div>
-
             </motion.div>
         </motion.div>
         <motion.div className="flex gap-3">
+            <motion.div className="p-3 pt-6 w-44">
+                <MealLabel className={sequence[i].meal == Meal.breakfast ? "dark-block" : "light-block"}>Завтрак</MealLabel>
+                {dishList.breakfast.map((dish, i) => (
+                    <motion.div key={dish.id} className="mt-4 text-wrap text-center leading-4">{dish.name}</motion.div>
+                ))}
+            </motion.div>
+            <motion.div className="p-3 pt-6 w-44">
+                <MealLabel className={sequence[i].meal == Meal.lunch ? "dark-block" : "light-block"}>Обед</MealLabel>
+            </motion.div>
+            <motion.div className="p-3 pt-6 w-44">
+                <MealLabel className={sequence[i].meal == Meal.dinner ? "dark-block" : "light-block"}>Ужин</MealLabel>
+            </motion.div>
             <Button className="h-full dark-block" onClick={deleteList}><Cross /></Button>
         </motion.div>
     </> : 
