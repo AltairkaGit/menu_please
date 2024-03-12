@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { MotionStyle, TargetAndTransition, motion } from "framer-motion"
+import { AnimationProps, MotionStyle, TargetAndTransition, Variants, motion } from "framer-motion"
 import { ReactNode } from "react"
 
 const CornersMap = {
@@ -11,18 +11,31 @@ const CornersMap = {
 
 export type Corners = ''| 'lg' | '3xl' | 'full'
 
-export const Block = ({ children, className, whileTap, corners = '', style = {}} : {
+export const Block = ({ children, className, whileTap, corners = '', style = {}, variants, initial, animate, exit, transition} : {
     children?: ReactNode,
     className?: string,
     corners?: Corners,
     whileTap?: TargetAndTransition,
-    style?: MotionStyle
+    style?: MotionStyle,
+    variants?: Variants,
+    initial?: string,
+    animate?: string,
+    exit?: string,
+    transition?: AnimationProps["transition"]
 }) => {
-    return <motion.div whileTap={whileTap} style={style} className={clsx(
-        "test-st",
-        CornersMap[corners],
-        className 
-    )}>
+    return <motion.div 
+        whileTap={whileTap}  
+        variants={variants} 
+        initial={initial} 
+        animate={animate} 
+        exit={exit} 
+        style={style}
+        transition={transition}
+        className={clsx(
+            "text-sm",
+            CornersMap[corners],
+            className 
+        )}>
         {children}
     </motion.div>
 }

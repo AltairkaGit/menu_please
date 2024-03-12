@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { DishList } from "../api"
 import { RootState } from "@shared/store"
 import { dishListService } from "@features/dish-list/service"
@@ -16,9 +16,12 @@ export const dishListSlice = createSlice({
     name: 'dishList',
     initialState,
     reducers: {
+        remove: (state, {payload: listId}: PayloadAction<number>) => void state.lists.splice(state.lists.findIndex((list) => list.id == listId), 1)
     },
     extraReducers: (builder) => {
         builder.addMatcher(dishListService.endpoints.getAll.matchFulfilled, (state, {payload}) => void state.lists.push(...payload))
+        builder.addMatcher(dishListService.endpoints.get.matchFulfilled, (state, {payload}) => void state.lists.push(payload))
+        builder.addMatcher(dishListService.endpoints.create.matchFulfilled, (state, {payload}) => void state.lists.push(payload))
     }
 })
 
