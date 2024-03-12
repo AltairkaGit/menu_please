@@ -50,7 +50,8 @@ export class DishListService {
     }
 
     async createDishList(ownerId: number) {
-        return await this.dishListRepository.create({ ownerId });
+        const list = await this.dishListRepository.create({ ownerId });
+        return await this.getDishList(list.id)
     }
 
     async deleteDishList(dishListId: number) {
