@@ -1,13 +1,13 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
-import { MenuListWide } from "./menu-list-wide"
+import { DishList } from "@entities/dish-list/api"
+import { MenuListWide } from "./wide"
+import { MenuListCompact } from "./compact"
 
 export const MenuList = (props : {
-    id: number,
     currentDish: AmountedDish,
-    currentMeal: Meal, 
-    breakfast: AmountedDish[],
-    lunch: AmountedDish[],
-    dinner: AmountedDish[]
-}) => (<>
-     <MenuListWide {...props} />
-</>)
+    currentMeal: Meal,
+    dishList: DishList
+}) => <>
+    <MenuListWide display="hidden md:flex lg:hidden xl:flex" {...props} />
+    <MenuListCompact display="hidden md:hidden lg:flex xl:hidden" {...props} />
+</>
