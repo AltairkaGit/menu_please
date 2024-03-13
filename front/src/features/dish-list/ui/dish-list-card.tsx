@@ -1,5 +1,5 @@
 import { DishList } from "@entities/dish-list/api"
-import { DishListCardUI } from "@entities/dish-list/ui/card"
+import { DishListCard as DishListCardUI } from "@entities/dish-list/ui/dish-list-card"
 import { useDeleteMutation } from "../service"
 import { useAppDispatch } from "@shared/hooks"
 import dishListSlice from "@entities/dish-list/model/dishListSlice"

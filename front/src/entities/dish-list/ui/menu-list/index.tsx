@@ -3,8 +3,8 @@ import { MenuListWide } from "./menu-list-wide"
 
 export const MenuList = (props : {
     id: number,
-    i: number
-    sequence: {meal:Meal, dish: AmountedDish}[], 
+    currentDish: AmountedDish,
+    currentMeal: Meal, 
     breakfast: AmountedDish[],
     lunch: AmountedDish[],
     dinner: AmountedDish[]

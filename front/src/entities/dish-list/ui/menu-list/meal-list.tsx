@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
 import { AmountedDish } from '@entities/dish/api'
-import { MealLabel } from './meal-label'
+import { MealLabel } from '../meal-label'
 
 export const MealList = ({listId, dishes, active, title, className, currentDishId}: 
     {listId: number, dishes: AmountedDish[], active: boolean, title: string, className?: string, currentDishId?: number}
