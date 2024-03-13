@@ -30,9 +30,7 @@ const App = () => {
           </Route>
           <Route element={<PrivateRoutes />}>
             <Route element={<BaseLayout />}>
-              <Route path="dashboard" element={<DashboardPage/>}>
-                <Route path="dish-list/:dishListId" element={<>hello im dish list</>} />
-              </Route>
+              <Route path="dashboard" element={<DashboardPage/>} />
               <Route path="studio" element={<StudioPage />} />
             </Route>
           </Route>          
