@@ -3,6 +3,7 @@ import { DishListCard as DishListCardUI } from "@entities/dish-list/ui/dish-list
 import { useDeleteMutation } from "../service"
 import { useAppDispatch } from "@shared/hooks"
 import dishListSlice from "@entities/dish-list/model/dishListSlice"
+import { DeleteListButton } from "@entities/dish-list/ui/dish-list-card/delete-button"
 
 export const DishListCard = ({order, dishList} : {order: number, dishList: DishList}) => {
     const [deleteDishList, _] = useDeleteMutation()
@@ -17,5 +18,5 @@ export const DishListCard = ({order, dishList} : {order: number, dishList: DishL
         }
     }
 
-    return <DishListCardUI order={order} dishList={dishList} deleteList={deleteList} />
+    return <DishListCardUI dishList={dishList} DeleteListButton={<DeleteListButton deleteList={deleteList} />} />
 }
