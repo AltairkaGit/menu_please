@@ -11,8 +11,8 @@ export const Summary = ({dishList} : {dishList: DishList}) => {
     const { p, f, c } = useMemo(() => calcTotalNutrientsRatio({breakfast, lunch, dinner}), [dishList])
 
     return (
-        <motion.div className="p-3 flex flex-col justify-between mb-8 self-stretch">
-            <motion.div className="mt-3 text-3xl">Ваше меню</motion.div>
+        <motion.div className="lg:p-3 flex flex-col justify-between mb-8 self-stretch">
+            <motion.div className="lg:mt-3 text-3xl">Ваше меню</motion.div>
             <motion.div className="text-2xl">
                 <motion.div className="mb-3"> Всего: {totalCalories} кал.</motion.div>
                 <Ratio proteins={p + '%'}  fats={f + '%'} carbo={c + '%'} />

@@ -8,7 +8,7 @@ export const MenuList = (props : {
     currentDish: AmountedDish,
     currentMeal: Meal,
     dishList: DishList
-}) => <motion.div className="mx-auto self-stretch">
+}) => <motion.div className="mx-auto md:px-4 self-stretch">
     <MenuListWide display="hidden md:flex lg:hidden xl:flex" {...props} />
     <MenuListCompact display="hidden md:hidden lg:flex xl:hidden" {...props} />
 </motion.div>

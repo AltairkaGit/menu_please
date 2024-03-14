@@ -12,18 +12,19 @@ import { MenuList } from "../menu-list"
 const checkIsEmpty = (dishList: DishList) => dishList.breakfast.length == 0 && dishList.lunch.length == 0 && dishList.dinner.length == 0
 
 const CardTemplate = ({ id, children, deleteList } : { id: number, children: ReactNode, deleteList: () => any}) => (
-    <Block className="flex w-full light-block mt-11 box-border min-h-80 justify-between items-center gap-5">
-        <Block className='dark-block w-8 h-auto shrink-0 self-stretch' />
+    <Block className="flex w-full flex-col lg:flex-row light-block mt-11 box-border min-h-80 justify-between items-center gap-5 pb-0 md:pb-12 lg:pb-0">
+        <Block className='hidden md:block dark-block w-auto h-4 lg:w-8 lg:h-auto shrink-0 self-stretch' />
         {children}
-        <Button className="dark-block h-auto self-stretch" onClick={deleteList}><Cross /></Button>
+        <Button className="dark-block w-8 h-auto self-stretch hidden lg:flex" onClick={deleteList}><Cross /></Button>
     </Block>
 )
 
 const EmptyList = ({id, deleteList}: {id: number, deleteList: () => any}) => (
     <CardTemplate id={id} deleteList={deleteList}>
-        <motion.h2 className="m-auto">
+        <motion.div className="m-auto text-2xl flex gap-3">
             Список пока пуст, выберите меню
-        </motion.h2>
+            <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross /></Button>
+        </motion.div>
     </CardTemplate>
 )
 
@@ -34,9 +35,13 @@ export const DishListCard = ({dishList, deleteList}: {dishList: DishList, delete
 
     return (
         <CardTemplate id={id} deleteList={deleteList}>
-            <motion.div className="flex gap-2 self-stretch items-center">
-                <Picture i={i} src={currentDish.picture} />       
+            <Block className="md:hidden h-20 w-full dark-block relative">
+                <Picture i={i} src={currentDish.picture} className="absolute left-1/2 -translate-x-1/2 -translate-y-12" />
+            </Block>
+            <motion.div className="flex gap-2 self-stretch lg:items-center justify-between p-8 lg:p-0 lg:justify-start">
+                <Picture i={i} src={currentDish.picture} className="hidden md:flex" />       
                 <Summary dishList={dishList} />
+                <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross /></Button>
             </motion.div>
             <MenuList dishList={dishList} currentDish={currentDish} currentMeal={currentMeal} />
         </CardTemplate>
