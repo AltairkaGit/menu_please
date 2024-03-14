@@ -1,5 +1,5 @@
 import { AmountedDish } from "@entities/dish/api"
-import { MealLabel } from "./menu-label"
+import { MealLabel } from "../../../../menu-label/active"
 import { motion } from "framer-motion"
 import { twMerge } from "tailwind-merge"
 

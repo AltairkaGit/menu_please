@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { Round } from "./round"
+import { Round } from "../dish-list/ui/menu-list/wide/round"
 import { twMerge } from "tailwind-merge"
 import { motion } from "framer-motion"
 

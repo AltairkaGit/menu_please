@@ -2,29 +2,32 @@ import { DishList } from "@entities/dish-list/api"
 import { Block } from "@shared/ui/block"
 import { Button } from "@shared/ui/button"
 import { Cross } from "@static/icons/cross"
-import { useChangeDishInterval } from "./use-change-dish-interval"
+import { useChangeDishInterval } from "@features/dish-list/use-change-dish-interval"
 import { motion } from 'framer-motion'
 import { ReactNode } from "react"
 import { Picture } from "./picture"
 import { Summary } from "./summary"
 import { MenuList } from "../menu-list"
+import { Link } from "react-router-dom"
 
 const checkIsEmpty = (dishList: DishList) => dishList.breakfast.length == 0 && dishList.lunch.length == 0 && dishList.dinner.length == 0
 
 const CardTemplate = ({ id, children, deleteList } : { id: number, children: ReactNode, deleteList: () => any}) => (
     <Block className="flex w-full flex-col lg:flex-row light-block mt-11 box-border min-h-80 justify-between items-center gap-5 pb-0 md:pb-12 lg:pb-0">
         <Block className='hidden md:block dark-block w-auto h-4 lg:w-8 lg:h-auto shrink-0 self-stretch' />
-        {children}
+        <Link className="flex w-full flex-col lg:flex-row " to={`/dish-list/${id}`}>
+            {children}
+        </Link>
         <Button className="dark-block w-8 h-auto self-stretch hidden lg:flex" onClick={deleteList}><Cross /></Button>
     </Block>
 )
 
 const EmptyList = ({id, deleteList}: {id: number, deleteList: () => any}) => (
     <CardTemplate id={id} deleteList={deleteList}>
-        <motion.div className="m-auto text-2xl flex gap-3">
+        <Link className="m-auto text-2xl flex gap-3" to={`/dish-list/${id}`}>
             Список пока пуст, выберите меню
             <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross /></Button>
-        </motion.div>
+        </Link>
     </CardTemplate>
 )
 

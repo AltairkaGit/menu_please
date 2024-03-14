@@ -6,7 +6,7 @@ export const BackButton = () => {
     const navigate = useNavigate()
     const goBack = () => navigate(-1)
 
-    return <Button onClick={goBack}>
+    return <Button onClick={goBack} className="light-block">
         <ArrowBack />
     </Button>
 }

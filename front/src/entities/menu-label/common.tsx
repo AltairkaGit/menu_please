@@ -1,4 +1,4 @@
-import { Round } from "./round"
+import { Round } from "../dish-list/ui/menu-list/compact/round"
 import { AnimatePresence, motion } from "framer-motion"
 
 export const MealLabel = ({children}

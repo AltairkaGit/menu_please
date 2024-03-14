@@ -1,5 +1,6 @@
 import { BaseLayout } from "@pages/base-layout"
 import { DashboardPage } from "@pages/dashboard-page"
+import { DishListPage } from "@pages/dish-list-page"
 import { DishPage } from "@pages/dish-page"
 import { MainPage } from "@pages/main-page"
 import { StudioPage } from "@pages/studio-page"
@@ -31,6 +32,7 @@ const App = () => {
           <Route element={<PrivateRoutes />}>
             <Route element={<BaseLayout />}>
               <Route path="dashboard" element={<DashboardPage/>} />
+              <Route path="dish-list/:id" element={<DishListPage />} />
               <Route path="studio" element={<StudioPage />} />
             </Route>
           </Route>          
