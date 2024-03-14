@@ -15,8 +15,10 @@ export const MenuListCompact = ({ currentDish, currentMeal, dishList, display } 
     currentMeal: Meal,
     dishList: DishList,
     display: string
-}) => (
-    <motion.div className={twMerge('flex grow mx-auto gap-8 self-stretch relative', display)}>
-        <MealList listId={dishList.id} dishes={dishList[currentMeal]} title={titles[currentMeal]} className='min-w-40 max-w-72' currentDishId={currentDish.id} />
+}) => {
+    return <motion.div className={twMerge('flex grow mx-auto gap-8 self-stretch relative', display)}>
+        <MealList currentMeal={currentMeal} listId={dishList.id} dishes={dishList[currentMeal]} 
+            title={titles[currentMeal]} className='w-52' currentDishId={currentDish.id} />
     </motion.div>
-)
+}
+

@@ -5,7 +5,7 @@ const RatioUnit = ({title, value}: {title: string, value: string}) => {
     return (
         <motion.div className="flex gap-1 flex-col">
             <motion.div className="text-center min-w-6">{title}</motion.div>
-            <Block className="text-center light-block w-16 font-normal">{value}</Block>
+            <Block className="text-center light-block w-14 font-normal">{value}</Block>
         </motion.div>
     )
 }

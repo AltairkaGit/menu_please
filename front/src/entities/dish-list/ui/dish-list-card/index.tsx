@@ -29,7 +29,6 @@ const EmptyList = ({id, deleteList}: {id: number, deleteList: () => any}) => (
 
 export const DishListCard = ({dishList, deleteList}: {dishList: DishList, deleteList: () => any, order: number}) => {
     if (checkIsEmpty(dishList)) return <EmptyList id={dishList.id} deleteList={deleteList} />
-
     const {id } = dishList
     const {i, currentDish, currentMeal} = useChangeDishInterval(dishList, 1000)
 
@@ -38,7 +37,7 @@ export const DishListCard = ({dishList, deleteList}: {dishList: DishList, delete
             <motion.div className="flex gap-2 self-stretch items-center">
                 <Picture i={i} src={currentDish.picture} />       
                 <Summary dishList={dishList} />
-            </motion.div>            
+            </motion.div>
             <MenuList dishList={dishList} currentDish={currentDish} currentMeal={currentMeal} />
         </CardTemplate>
     )

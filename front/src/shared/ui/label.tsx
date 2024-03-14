@@ -12,7 +12,7 @@ export const Label = ({children, leftButton, rightButton, className, corners = '
 }) => {
 
     return <Block corners={corners} className={twMerge(
-        "text-st md:text-2xl h-[3.625rem] text overflow-hidden flex items-center xl:text-st w-[20.5rem]",
+        "text-st h-[3.625rem] text overflow-hidden flex items-center w-[20.5rem]",
         !leftButton && "pl-[3.625rem]",
         !rightButton && "pr-[3.625rem]",
         className)}
