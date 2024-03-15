@@ -17,8 +17,14 @@ interface DishAndMeal {
     meal: Meal
 }
 
+interface AmountedDishAndMeal {
+    amount: number,
+    dishId: number
+    meal: Meal
+}
+
 export type AddDishInList = DishManipulation<DishAndMeal>
 
 export type RemoveDishFromList = DishManipulation<DishAndMeal>
 
-export type ChangeDishAmountInList = DishManipulation<DishAndMeal & { amount: number }>
+export type ChangeDishAmountInList = DishManipulation<AmountedDishAndMeal>

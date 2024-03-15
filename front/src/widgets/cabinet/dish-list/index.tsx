@@ -9,6 +9,7 @@ import { MealTab } from "@entities/meal-label/tab"
 import { calcMealCalories } from "@features/dish-list/calc-meal-calories"
 import { calcMealNutrientsRatio } from "@features/dish-list/calc-meal-nutrients"
 import { useGetQuery } from "@features/dish-list/service"
+import { DishPortionControl } from "@features/dish-list/ui/dish-portion-control"
 import { Block } from "@shared/ui/block"
 import { Cooking } from "@static/icons/cooking"
 import { AnimatePresence, motion } from "framer-motion"
@@ -64,19 +65,17 @@ const UI = ({dishList} : {dishList: DishList}) => {
             <motion.div className="flex-1 flex-grow-[7] flex flex-col justify-between">
                 <motion.div className="flex gap-14">
                     <AnimatePresence mode="wait">
-                        <motion.img key={`${dish.id}-${meal}`} src={dish.picture} className="w-[27rem] h-[27rem]" variants={{in: {opacity: 1, scale: 1.2, rotate: 0}, out: {opacity: 0, scale: 0.5, rotate: "60deg"}}} initial="out" animate="in" exit="out" transition={{duration: 0.5}}/>
-                        <motion.div className="flex flex-col justify-between grow">
+                        <motion.img key={`${dish.id}-${meal}-picture`} src={dish.picture} className="w-[27rem] h-[27rem]" variants={{in: {opacity: 1, scale: 1.2, rotate: 0}, out: {opacity: 0, scale: 0.5, rotate: "60deg"}}} initial="out" animate="in" exit="out" transition={{duration: 0.5}}/>    
+                        <motion.div key={`${dish.id}-${meal}-summary`} className="flex flex-col justify-between grow">
                             <DishSummary dish={dish} />
-                            <motion.div>
-                                portions
-                            </motion.div>
+                            <DishPortionControl key={`${dish.id}-${meal}-control`} id={dishList.id} dish={dish} meal={meal} />
                         </motion.div>
-                    </AnimatePresence>                    
+                    </AnimatePresence>             
                 </motion.div>
                 <motion.div className="flex flex-col gap-7">
                     <AnimatePresence mode="wait">
                         <motion.div key={meal} className="flex gap-4">
-                            {dishList[meal].map(item => <DishTab dish={item} currentDish={dish} setDish={setDish} />)}
+                            {dishList[meal].map(item => <DishTab key={`${item.id}-${meal}`} dish={item} currentDish={dish} setDish={setDish} />)}
                         </motion.div>    
                     </AnimatePresence>
                     <motion.div className="flex gap-12">
@@ -113,7 +112,8 @@ const UI = ({dishList} : {dishList: DishList}) => {
 
 export const DishListEditor = ({id} : {id: number}) => {
     const {data: dishList, isError} = useGetQuery(id || 0)
-    if (!dishList || isError) return <motion.div className="text-center text-4xl">Ой, что-то пошло не так</motion.div>
+    if (isError) return <motion.div className="text-center text-4xl">Ой, что-то пошло не так</motion.div>
+    if (!dishList) return null
 
     return <UI dishList={dishList} />
 }

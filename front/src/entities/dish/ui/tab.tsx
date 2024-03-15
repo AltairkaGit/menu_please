@@ -16,5 +16,4 @@ export const DishTab = ({ dish, currentDish, setDish }: { dish: AmountedDish, cu
                 <motion.div className="text-base px-2 mb-2">{dish.amount * dish.calories} кал.</motion.div>
             </motion.button>
         </motion.div>
-    
 }
