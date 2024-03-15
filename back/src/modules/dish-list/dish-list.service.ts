@@ -23,7 +23,7 @@ export class DishListService {
     }
 
     async getDishList(dishListId: number) : Promise<DishListDto> {
-        const rows = await this.dishListDishesRepository.findAll({where: {dishListId}, attributes: ["dishId", "meal"]});
+        const rows = await this.dishListDishesRepository.findAll({where: {dishListId}, attributes: ["dishId", "meal", "amount"]});
         if (!rows) throw new BadRequestException(AppError.NO_DISH_LIST);
         const res = new DishListDto();
         res.id = dishListId;
@@ -36,6 +36,7 @@ export class DishListService {
         rows.forEach(row => {
             !meal.has(row.meal) && meal.set(row.meal, []);
             const dto = view.get(row.dishId)
+            dto && (dto.amount = row.amount)
             dto && meal.get(row.meal)?.push(dto);
         });
         res.breakfast = meal.get(Meal.breakfast) ?? []
