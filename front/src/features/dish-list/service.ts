@@ -6,18 +6,22 @@ import { createUrl } from '@shared/base-api'
 export const dishListService = createApi({
     reducerPath: 'service/dishList',
     baseQuery: fetchBaseQuery({ baseUrl: createUrl('dish-list'), credentials: "include" }),
+    tagTypes: ['DishList'],
     endpoints: (builder) => ({        
         getAll: builder.query<DishList[], void>({
             query: () => ({
                 url: 'all',
                 method: 'GET',
-            })
+            }),
+            providesTags: (result) => 
+                result ? result.map(item => ({type: 'DishList', id: item.id})) : ['DishList']
         }),
         get: builder.query<DishList, number>({
             query: (id) => ({
                 url: 'id/' + id,
                 method: 'GET',
-            })
+            }),
+            providesTags: (result, error, id) => [{type: 'DishList', id}]
         }),
         create: builder.mutation<DishList, void>({
             query: () => ({

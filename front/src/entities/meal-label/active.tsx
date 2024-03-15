@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
-import { Round } from "../dish-list/ui/menu-list/wide/round"
 import { twMerge } from "tailwind-merge"
 import { motion } from "framer-motion"
+import { Round } from "./round-active"
 
 export const MealLabel = ({listId, children, active, innerClassName, outerClassName}
     : {listId: number, children: ReactNode, active?: boolean, innerClassName?: string, outerClassName?: string}) => {

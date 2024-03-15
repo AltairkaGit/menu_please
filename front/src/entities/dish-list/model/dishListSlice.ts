@@ -19,8 +19,12 @@ export const dishListSlice = createSlice({
         remove: (state, {payload: listId}: PayloadAction<number>) => void state.lists.splice(state.lists.findIndex((list) => list.id == listId), 1)
     },
     extraReducers: (builder) => {
-        builder.addMatcher(dishListService.endpoints.getAll.matchFulfilled, (state, {payload}) => void state.lists.push(...payload))
-        builder.addMatcher(dishListService.endpoints.get.matchFulfilled, (state, {payload}) => void state.lists.push(payload))
+        builder.addMatcher(dishListService.endpoints.getAll.matchFulfilled, (state, {payload}) => void state.lists.splice(0, state.lists.length, ...payload))
+        builder.addMatcher(dishListService.endpoints.get.matchFulfilled, (state, {payload}) => {
+            const idx = state.lists.findIndex(list => list.id == payload.id)
+            if (idx >= 0) state.lists.splice(idx, 1, payload) 
+            else state.lists.push(payload)
+        })
         builder.addMatcher(dishListService.endpoints.create.matchFulfilled, (state, {payload}) => void state.lists.push(payload))
     }
 })
