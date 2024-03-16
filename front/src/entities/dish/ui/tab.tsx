@@ -2,6 +2,7 @@ import { Block } from "@shared/ui/block"
 import { AmountedDish } from "../api"
 import { twMerge } from "tailwind-merge"
 import { motion } from "framer-motion"
+import { PlusMd } from "@static/icons/plus-md"
 
 export const DishTab = ({ dish, currentDish, setDish }: { dish: AmountedDish, currentDish: AmountedDish, setDish: (dish: AmountedDish) => any }) => {
         const active = dish==currentDish
@@ -17,3 +18,12 @@ export const DishTab = ({ dish, currentDish, setDish }: { dish: AmountedDish, cu
             </motion.button>
         </motion.div>
 }
+
+export const AddDishTab = ({showModal}: {showModal: () => any}) => {
+    return <motion.button whileTap={{scale: 0.9}} onClick={showModal} className="w-56 h-56 flex justify-center items-center flex-col gap-3 hover:light-block rounded-3xl"
+        layout initial={{x: "-1rem", opacity: 0}} animate={{x: 0, opacity: 1}} exit={{x: "1rem", opacity: 0}} transition={{duration: 0.5}}
+    >
+        <PlusMd />
+        Добавить
+    </motion.button>
+} 
