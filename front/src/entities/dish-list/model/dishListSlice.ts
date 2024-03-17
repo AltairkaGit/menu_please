@@ -19,7 +19,20 @@ export const dishListSlice = createSlice({
     initialState,
     reducers: {
         remove: (state, {payload: listId}: PayloadAction<number>) => void state.lists.splice(state.lists.findIndex((list) => list.id == listId), 1),
-        increase: (state, {payload}: PayloadAction<{id: number, meal: Meal, dishId: number}>) => void state.lists.find() //increase and decrease here, remove local state from controller
+        increaseDishAmount: (state, {payload}: PayloadAction<{id: number, meal: Meal, dishId: number}>) => {
+            const list = state.lists.find(list => list.id == payload.id)
+            if (!list) return
+            const dish = list[payload.meal].find(dish => dish.id == payload.dishId)
+            if (!dish) return
+            dish.amount++
+        },
+        decreaseDishAmount: (state, {payload}: PayloadAction<{id: number, meal: Meal, dishId: number}>) => {
+            const list = state.lists.find(list => list.id == payload.id)
+            if (!list) return
+            const dish = list[payload.meal].find(dish => dish.id == payload.dishId)
+            if (!dish) return
+            dish.amount--
+        }
     },
     extraReducers: (builder) => {
         builder.addMatcher(dishListService.endpoints.getAll.matchFulfilled, (state, {payload}) => void state.lists.splice(0, state.lists.length, ...payload))
@@ -57,6 +70,11 @@ export const dishListSlice = createSlice({
 })
 
 export const selectDishLists = (state: RootState) => state.dishList.lists
-export const selectDishList = (state: RootState, id: number) => state.dishList.lists.find(list => list.id == id) ?? {id: 0, breakfast: [], lunch: [], dinner: []}
+export const selectDishList = (state: RootState, id: number) => state.dishList.lists.find(list => list.id == id) ?? {id: -1, breakfast: [], lunch: [], dinner: []}
+
+export const {
+    increaseDishAmount,
+    decreaseDishAmount
+} = dishListSlice.actions
 
 export default dishListSlice

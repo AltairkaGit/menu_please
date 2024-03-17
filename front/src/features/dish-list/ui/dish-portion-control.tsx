@@ -4,36 +4,30 @@ import { DishPortionControl as UI } from "@entities/dish-list/ui/dish-portion-co
 import { useState } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 import { useDebouncedCallback } from "use-debounce"
+import { useAppDispatch, useAppSelector } from "@shared/hooks"
+import { decreaseDishAmount, increaseDishAmount } from "@entities/dish-list/model/dishListSlice"
 
 export const DishPortionControl = ({id, meal, dish}: {id: number, meal: Meal, dish: AmountedDish}) => {
-    const [amount, setAmount] = useState<number>(dish.amount)
+    const dispatch = useAppDispatch()
     const [changeAmount, {isLoading: changePending}] = useChangeAmountMutation()
     const [deleteDish, {isLoading: delPending}] = useDeleteDishMutation()
     const pending = changePending || delPending
     const debouncedChange = useDebouncedCallback((amount) => {
         changeAmount({id, body: {amount, meal, dishId: dish.id}}).unwrap()
-    }, 2000)
+    }, 500)
 
     const increase = async () => {
         try {
-            setAmount(prev => {
-                const next = prev + 1
-                debouncedChange.cancel()
-                debouncedChange(next)
-                return next
-            })
+            dispatch(increaseDishAmount({id, meal, dishId: dish.id}))
+            debouncedChange(dish.amount + 1)
         } catch (err) {
 
         }
     }
     const decrease = async () => {
         try {
-            setAmount(prev => {
-                const next = prev - 1
-                debouncedChange.cancel()
-                debouncedChange(next)
-                return next
-            })
+            dispatch(decreaseDishAmount({id, meal, dishId: dish.id}))
+            debouncedChange(dish.amount - 1)
         } catch (err) {
 
         }
@@ -47,6 +41,6 @@ export const DishPortionControl = ({id, meal, dish}: {id: number, meal: Meal, di
 
 
 
-    return <UI disabled={pending} amount={amount} increase={increase} decrease={decrease} remove={remove} />
+    return <UI disabled={pending} amount={dish.amount} increase={increase} decrease={decrease} remove={remove} />
     
 }

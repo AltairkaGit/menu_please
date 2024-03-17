@@ -16,7 +16,7 @@ import { useAppSelector } from "@shared/hooks"
 import { Block } from "@shared/ui/block"
 import { Cooking } from "@static/icons/cooking"
 import { AnimatePresence, motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 
 const DishSummary = ({dish}: {dish: AmountedDish}) => (
@@ -55,6 +55,11 @@ const MealSummary = ({meal, calories, p, f, c} : {meal: Meal, calories: number, 
 const UI = ({dishList}: {dishList: DishList}) => {
     const [meal, setMeal] = useState<Meal>(Meal.breakfast)
     const [dish, setDish] = useState<AmountedDish>(dishList.breakfast[0])
+
+    useEffect(() => {
+        const d = dishList[meal].find(item => item.id == dish.id)
+        d && setDish(d)
+    }, [dishList])
 
     const calories = calcMealCalories(dishList[meal])
     const pfc = calcMealNutrientsRatio(dishList[meal])
