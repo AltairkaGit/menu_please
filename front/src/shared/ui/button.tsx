@@ -12,7 +12,7 @@ export const Button = ({ onClick, children, className, whileTap, disabled = fals
     whileTap?: TargetAndTransition,
     disabled?: boolean
 }) => {
-    return <motion.button className={twMerge("w-[3.625rem] h-[3.625rem] flex items-center justify-center outline-1", CornersMap[corners], className)}
+    return <motion.button className={twMerge("w-[3.625rem] h-[3.625rem] flex items-center justify-center outline-1 cursor-pointer", CornersMap[corners], className)}
         disabled={disabled} onClick={onClick} whileTap={whileTap ?? {scale: 0.8}}>
             {children}
     </motion.button>

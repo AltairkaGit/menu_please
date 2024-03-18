@@ -13,9 +13,8 @@ export const DishListPage = () => {
 
     return <>
         <Header LeftLabel={LeftLabel} RightLabel={<UserProfile/>} />
-        <motion.div className="pt-32 pb-8 xl:pb-0">
+        <motion.div className="pt-32 pb-8 xl:pb-0 relative">
             <DishListEditor id={Number(id)} />
-            {/* modal here */}
             <ScrollRestoration />
         </motion.div>
     </>

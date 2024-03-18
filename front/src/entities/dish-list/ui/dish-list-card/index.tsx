@@ -2,7 +2,7 @@ import { DishList } from "@entities/dish-list/api"
 import { Block } from "@shared/ui/block"
 import { Button } from "@shared/ui/button"
 import { Cross } from "@static/icons/cross"
-import { useChangeDishInterval } from "@features/dish-list/use-change-dish-interval"
+import { useChangeDishInterval } from "@features/menu/use-change-dish-interval"
 import { motion } from 'framer-motion'
 import { ReactNode } from "react"
 import { Picture } from "./picture"

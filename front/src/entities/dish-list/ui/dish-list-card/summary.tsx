@@ -1,7 +1,7 @@
 import { DishList } from "@entities/dish-list/api"
 import { Ratio } from "@entities/dish/ui/ratio"
-import { calcTotalCalories } from "@features/dish-list/calc-total-calories"
-import { calcTotalNutrientsRatio } from "@features/dish-list/calc-total-nutrients"
+import { calcTotalCalories } from "@features/menu/calc-total-calories"
+import { calcTotalNutrientsRatio } from "@features/menu/calc-total-nutrients"
 import { motion } from "framer-motion"
 import { useMemo } from "react"
 

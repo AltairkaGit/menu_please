@@ -2,12 +2,10 @@ import { DishList } from "@entities/dish-list/api"
 import { selectDishLists } from "@entities/dish-list/model/dishListSlice"
 import { AmountedDish, Meal } from "@entities/dish/api"
 import { Ratio } from "@entities/dish/ui/ratio"
-import { DishTab } from "@entities/dish/ui/tab"
-import { calcMealCalories } from "@features/dish-list/calc-meal-calories"
-import { calcMealNutrientsRatio } from "@features/dish-list/calc-meal-nutrients"
-import { useGetQuery } from "@features/dish-list/service"
-import { AddDishTab } from "@features/dish-list/ui/add-dish-in-meal-button"
-import { DishPortionControl } from "@features/dish-list/ui/dish-portion-control"
+import { calcMealCalories } from "@features/menu/calc-meal-calories"
+import { calcMealNutrientsRatio } from "@features/menu/calc-meal-nutrients"
+import { useGetQuery } from "@features/menu/service"
+import { DishPortionControl } from "@features/menu/ui/dish-portion-control"
 import { useAppSelector } from "@shared/hooks"
 import { Block } from "@shared/ui/block"
 import { Cooking } from "@static/icons/cooking"
@@ -17,6 +15,8 @@ import { DishSummary } from "./dish-summary"
 import { MealSummary } from "./meal-summary"
 import { MealTabs } from "./meal-tabs"
 import { MealDishes } from "./meal-dishes"
+import { useDishSearchModal } from "@features/dish-search-modal/use-dish-search-modal"
+import { DishSearchModal } from "@features/dish-search-modal/ui"
 
 const UI = ({dishList, openDishSearch}: {dishList: DishList, openDishSearch: (id: number, meal: Meal) => any}) => {
     const [meal, setMeal] = useState<Meal>(Meal.breakfast)
@@ -83,23 +83,15 @@ const UI = ({dishList, openDishSearch}: {dishList: DishList, openDishSearch: (id
 
 export const DishListEditor = ({id} : {id: number}) => {
     const {data, isError} = useGetQuery(id || 0)
-    const [searchOpen, setSearchOpen] = useState<boolean>(false)
-
+    const dishSearchModal = useDishSearchModal()
     if (isError) return <motion.div className="text-center text-4xl">Ой, что-то пошло не так</motion.div>
     const lists = useAppSelector(selectDishLists)
     if (!data) return null
     const dishList = lists.find(list => list.id == data.id)
     if (!dishList) return null
 
-    const openDishSearch = (id: number, meal: Meal) => {
-        setSearchOpen(true)
-    }
-
-    const closeDishSearch = () => {
-        setSearchOpen(false)
-    }
-
     return <>        
-        <UI dishList={dishList} openDishSearch={openDishSearch} />
+        <UI dishList={dishList} openDishSearch={dishSearchModal.open} />
+        {dishSearchModal.isOpen ? <DishSearchModal /> : null}
     </> 
 }

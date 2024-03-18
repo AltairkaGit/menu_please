@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { DishList } from "../api"
 import { RootState } from "@shared/store"
-import { dishListService } from "@features/dish-list/service"
+import { dishListService } from "@features/menu/service"
 import { Meal } from "@entities/dish/api"
 import { useSelector } from "react-redux"
 
