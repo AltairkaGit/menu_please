@@ -1,7 +1,8 @@
 import { motion } from "framer-motion"
 import { ReactNode } from "react"
-import { Block, Corners } from "./block"
+import { Block } from "./block"
 import { twMerge } from "tailwind-merge"
+import { Corners } from "./corners"
 
 export const Label = ({children, leftButton, rightButton, className, corners = ''} : {
     children: ReactNode,

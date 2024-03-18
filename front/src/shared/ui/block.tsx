@@ -1,15 +1,7 @@
 import clsx from "clsx"
 import { AnimationProps, MotionStyle, TargetAndTransition, Variants, motion } from "framer-motion"
 import { ReactNode } from "react"
-
-const CornersMap = {
-    '': 'rounded-md',
-    'lg': 'rounded-lg',
-    '3xl': 'rounded-3xl',
-    'full': 'rounded-full'
-}
-
-export type Corners = ''| 'lg' | '3xl' | 'full'
+import { Corners, CornersMap } from "./corners"
 
 export const Block = ({ children, className, whileTap, corners = '', style = {}, variants, initial, animate, exit, transition} : {
     children?: ReactNode,

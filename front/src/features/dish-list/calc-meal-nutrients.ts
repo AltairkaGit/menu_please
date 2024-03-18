@@ -5,9 +5,9 @@ export const calcMealNutrients = (dishes: AmountedDish[]) => {
     let f = 0
     let c = 0
     dishes.forEach(dish => {
-        p += dish.proteins
-        f += dish.fats
-        c += dish.carbohydrates
+        p += dish.proteins * dish.amount
+        f += dish.fats * dish.amount
+        c += dish.carbohydrates * dish.amount
     })
     return { p, f, c }
 }

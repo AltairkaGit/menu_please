@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  /* width */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
+    height: 1px;
   }
 
   /* Track */

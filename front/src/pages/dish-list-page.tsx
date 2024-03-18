@@ -4,7 +4,7 @@ import { Header } from '@widgests/cabinet/shared/header'
 import { UserProfile } from '@widgests/cabinet/dashboard/user-profile'
 import { ScrollRestoration, useParams } from 'react-router-dom'
 import { BackButton } from '@widgests/cabinet/shared/back-button'
-import { DishListEditor } from '@widgests/cabinet/dish-list'
+import { DishListEditor } from '@widgests/cabinet/menu'
 
 const LeftLabel = <Label className="light-block" leftButton={<BackButton />}>Меню</Label>
 
@@ -13,8 +13,9 @@ export const DishListPage = () => {
 
     return <>
         <Header LeftLabel={LeftLabel} RightLabel={<UserProfile/>} />
-        <motion.div className="pt-32">
+        <motion.div className="pt-32 pb-8 xl:pb-0">
             <DishListEditor id={Number(id)} />
+            {/* modal here */}
             <ScrollRestoration />
         </motion.div>
     </>
