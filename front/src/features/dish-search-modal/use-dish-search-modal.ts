@@ -12,10 +12,10 @@ export const useDishSearchModal = () => {
         setId(id)
     }
 
-    const close = (id: number, meal: Meal) => {
+    const close = () => {
         setOpen(false)
         setMeal(undefined)
-        setId(id)
+        setId(undefined)
     }
 
     return {open, close, isOpen, meal, id}

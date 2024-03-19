@@ -1,5 +1,6 @@
 import { Block } from "@shared/ui/block"
+import { twMerge } from "tailwind-merge"
 
-export const Cooker = ({name}: {name: string}) => (
-    <Block corners="full" className="light-block self-start py-1 px-3">От {name}</Block>
+export const Cooker = ({name, className}: {name: string, className?: string}) => (
+    <Block corners="full" className={twMerge("light-block self-start py-1 px-3", className)}>От {name}</Block>
 )

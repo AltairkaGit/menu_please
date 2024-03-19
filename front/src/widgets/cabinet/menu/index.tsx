@@ -92,6 +92,6 @@ export const DishListEditor = ({id} : {id: number}) => {
 
     return <>        
         <UI dishList={dishList} openDishSearch={dishSearchModal.open} />
-        {dishSearchModal.isOpen ? <DishSearchModal /> : null}
+        <DishSearchModal isOpen={dishSearchModal.isOpen} close={dishSearchModal.close} />
     </> 
 }

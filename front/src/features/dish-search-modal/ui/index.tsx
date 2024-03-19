@@ -1,29 +1,40 @@
 import { Meal } from "@entities/dish/api"
 import { DishList } from "@features/dish-list/ui"
 import { AnimatePresence, motion } from "framer-motion"
+import { useEffect } from "react"
 
-interface Form {
+interface Search {
     query: string
     dir: 'asc' | 'desc'
     ord: string,
     meal: Meal
 }
 
-export const DishSearchModal = () => {
+const variants = {
+    in: {
+        display: 'block'
+    },
+    out: {
+        display: 'none'
+    }
+}
 
+export const DishSearchModal = ({isOpen, close}: {isOpen: boolean, close: () => any}) => {
+    useEffect(() => {
+        const handler = (e: any) => {
+            if (e.key == "Escape") close()
+        }
+        document.addEventListener("keydown", handler)
+        return () => document.removeEventListener("keydown", handler)
+    }, [])
 
     return (
         <AnimatePresence mode="wait">
-            <motion.div className="absolute z-20 top-24 -bottom-4 light-block -left-4 -right-4 bg-opacity-95 backdrop-blur-sm rounded-3xl p-12"
-                layout transition={{duration: 0.25}}
-                initial={{scale: 0.3, opacity: 0}}
-                animate={{scale: 1, opacity: 1}}
-                exit={{scale: 0.3, opacity: 0}}
-            >
+            <motion.div animate={isOpen ? "in" : "out"} variants={variants} className="absolute z-20 top-28 -bottom-4 light-block -left-4 -right-4 bg-opacity-95 backdrop-blur-sm rounded-3xl p-12  overflow-y-auto">
                 <DishList meal={Meal.breakfast} />
             </motion.div>
         </AnimatePresence>
-        
+              
     )
 
 }
