@@ -4,7 +4,7 @@ import { useSearchQuery } from "@features/dish/service"
 import { Button } from "@shared/ui/button"
 import { ArrowFront } from "@static/icons/arrow-front"
 import { PlusSm } from "@static/icons/plus-sm"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 
 const variants = {
     in: {transition:{staggerChildren: 0.05, delayChildren: 0.25}}, 

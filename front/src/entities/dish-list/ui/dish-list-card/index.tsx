@@ -18,7 +18,7 @@ const CardTemplate = ({ id, children, deleteList } : { id: number, children: Rea
         <Link className="flex w-full flex-col lg:flex-row " to={`/dish-list/${id}`}>
             {children}
         </Link>
-        <Button className="dark-block w-8 h-auto self-stretch hidden lg:flex" onClick={deleteList}><Cross /></Button>
+        <Button className="dark-block w-8 h-auto self-stretch hidden lg:flex" onClick={deleteList}><Cross className="stroke-white" /></Button>
     </Block>
 )
 
@@ -26,7 +26,7 @@ const EmptyList = ({id, deleteList}: {id: number, deleteList: () => any}) => (
     <CardTemplate id={id} deleteList={deleteList}>
         <Link className="m-auto text-2xl flex gap-3" to={`/dish-list/${id}`}>
             Список пока пуст, выберите меню
-            <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross /></Button>
+            <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross className="stroke-white" /></Button>
         </Link>
     </CardTemplate>
 )
@@ -44,7 +44,7 @@ export const DishListCard = ({dishList, deleteList}: {dishList: DishList, delete
             <motion.div className="flex gap-2 self-stretch lg:items-center justify-between p-8 lg:p-0 lg:justify-start">
                 <Picture i={i} src={currentDish.picture} className="hidden md:flex" />       
                 <Summary dishList={dishList} />
-                <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross /></Button>
+                <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross className="stroke-white" /></Button>
             </motion.div>
             <MenuList dishList={dishList} currentDish={currentDish} currentMeal={currentMeal} />
         </CardTemplate>

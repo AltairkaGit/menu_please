@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom"
 
 export const BaseLayout = () => {
     return (
-        <motion.main className="min-h-dvh px-10 xl:px-24 w-full relative">
+        <motion.main className="min-h-dvh px-10 xl:px-24 w-full">
             <Outlet/>
         </motion.main>
     )

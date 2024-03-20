@@ -30,7 +30,7 @@ export const DishSearchModal = ({isOpen, close}: {isOpen: boolean, close: () => 
 
     return (
         <AnimatePresence mode="wait">
-            <motion.div animate={isOpen ? "in" : "out"} variants={variants} className="absolute z-20 top-28 -bottom-4 light-block -left-4 -right-4 bg-opacity-95 backdrop-blur-sm rounded-3xl p-12  overflow-y-auto">
+            <motion.div animate={isOpen ? "in" : "out"} variants={variants} className="absolute z-20 top-28 h-[85dvh] light-block -left-4 -right-4 rounded-3xl p-12  overflow-y-auto">
                 <DishList meal={Meal.breakfast} />
             </motion.div>
         </AnimatePresence>
