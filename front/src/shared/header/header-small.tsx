@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Label } from "@shared/ui/label"
+import { Label } from "@shared/kit/label"
 
 export const HeaderSmall = () => {
     return (

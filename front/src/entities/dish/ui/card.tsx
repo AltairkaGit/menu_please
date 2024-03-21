@@ -2,7 +2,7 @@ import { Dish } from "../api"
 import { AnimatePresence, motion } from "framer-motion"
 import { Ratio } from "./ratio"
 import { ReactNode } from "react"
-import { Block } from "@shared/ui/block"
+import { Block } from "@shared/kit/block"
 import { Cooker } from "./cooker"
 
 const variants = {
@@ -30,10 +30,6 @@ const LandscapeCard = ({dish, buttons}: {dish: Dish, buttons: ReactNode[]}) => (
             <motion.div className="flex flex-col gap-4">
                 <Ratio proteins={`${dish.proteins}`} carbo={`${dish.carbohydrates}`} fats={`${dish.fats}`} />
                 <motion.div className="flex justify-between">
-                    <Block className="light-block w-[3.625rem] flex flex-col items-center justify-center">
-                        <motion.p>{dish.calories}</motion.p>
-                        <motion.p>кал</motion.p>                            
-                    </Block>
                     {buttons}
                 </motion.div>
             </motion.div>

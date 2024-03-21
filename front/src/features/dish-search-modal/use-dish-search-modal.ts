@@ -3,8 +3,8 @@ import { useState } from "react"
 
 export const useDishSearchModal = () => {
     const [isOpen, setOpen] = useState<boolean>(false)
-    const [meal, setMeal] = useState<Meal>()
-    const [id, setId] = useState<number>() 
+    const [meal, setMeal] = useState<Meal>(Meal.breakfast)
+    const [id, setId] = useState<number>(0) 
     
     const open = (id: number, meal: Meal) => {
         setOpen(true)
@@ -14,8 +14,6 @@ export const useDishSearchModal = () => {
 
     const close = () => {
         setOpen(false)
-        setMeal(undefined)
-        setId(undefined)
     }
 
     return {open, close, isOpen, meal, id}

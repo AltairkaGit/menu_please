@@ -1,6 +1,6 @@
 import { Meal } from "@entities/dish/api"
 import { Ratio } from "@entities/dish/ui/ratio"
-import { Block } from "@shared/ui/block"
+import { Block } from "@shared/kit/block"
 import { AnimatePresence } from "framer-motion"
 import { motion } from "framer-motion"
 

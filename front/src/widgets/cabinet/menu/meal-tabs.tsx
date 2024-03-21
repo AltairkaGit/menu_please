@@ -1,5 +1,5 @@
 import { Meal } from "@entities/dish/api"
-import { MealTab } from "@entities/meal-label/tab"
+import { MealTab } from "@shared/meal-label/tab"
 import { motion } from "framer-motion"
 
 export const MealTabs = ({setMeal, meal} : {setMeal: (meal: Meal) => any, meal: Meal}) => (

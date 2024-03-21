@@ -1,5 +1,5 @@
-import { Block } from "@shared/ui/block"
-import { Button } from "@shared/ui/button"
+import { Block } from "@shared/kit/block"
+import { Button } from "@shared/kit/button"
 import { Cross } from "@static/icons/cross"
 import { MinusSm } from "@static/icons/minus-sm"
 import { PlusSm } from "@static/icons/plus-sm"

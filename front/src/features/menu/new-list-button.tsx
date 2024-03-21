@@ -1,5 +1,5 @@
-import { NewListButtonUI } from "@entities/dish-list/ui/new-list"
-import { useCreateMutation } from "../service"
+import { NewListButtonUI } from "@entities/menu/ui/new-list"
+import { useCreateMutation } from "./service"
 
 export const NewListButton = () => {
     const [createList, _] = useCreateMutation()

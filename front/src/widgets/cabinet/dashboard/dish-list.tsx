@@ -1,6 +1,6 @@
-import { selectDishLists } from "@entities/dish-list/model/dishListSlice"
+import { selectDishLists } from "@entities/menu/model/dishListSlice"
 import * as DishListService from "@features/menu/service"
-import { DishListCard } from "@features/menu/ui/dish-list-card"
+import { DishListCard } from "@widgests/cabinet/menu/dish-list-card"
 import { useSelector } from "react-redux"
 
 export const DishList = () => {

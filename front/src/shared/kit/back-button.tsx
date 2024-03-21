@@ -1,4 +1,4 @@
-import { Button } from "@shared/ui/button"
+import { Button } from "@shared/kit/button"
 import { ArrowBack } from "@static/icons/arrow-back"
 import { useNavigate } from "react-router-dom"
 

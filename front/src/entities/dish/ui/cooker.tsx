@@ -1,4 +1,4 @@
-import { Block } from "@shared/ui/block"
+import { Block } from "@shared/kit/block"
 import { twMerge } from "tailwind-merge"
 
 export const Cooker = ({name, className}: {name: string, className?: string}) => (

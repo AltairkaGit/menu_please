@@ -1,7 +1,7 @@
 import { selectUsername } from "@entities/entrance/model/auth-slice"
 import { LogoutButton } from "@features/auth/ui/logout-button"
-import { Button } from "@shared/ui/button"
-import { Label } from "@shared/ui/label"
+import { Button } from "@shared/kit/button"
+import { Label } from "@shared/kit/label"
 import { ReactNode } from "react"
 import { useSelector } from "react-redux"
 

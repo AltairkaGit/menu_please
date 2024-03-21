@@ -1,6 +1,5 @@
 import { TargetAndTransition, motion } from "framer-motion"
 import { ReactNode } from "react"
-import { Block } from "./block"
 import { twMerge } from "tailwind-merge"
 import { Corners, CornersMap } from "./corners"
 

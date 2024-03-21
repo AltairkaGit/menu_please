@@ -1,4 +1,4 @@
-import { Button } from "@shared/ui/button"
+import { Button } from "@shared/kit/button"
 import { Logout } from "@static/icons/logout"
 import { useLogoutMutation } from "../service"
 

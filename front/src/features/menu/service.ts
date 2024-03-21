@@ -1,4 +1,4 @@
-import { AddDishInList, ChangeDishAmountInList, DishList, RemoveDishFromList } from '@entities/dish-list/api'
+import { AddDishInList, ChangeDishAmountInList, DishList, RemoveDishFromList } from '@entities/menu/api'
 import { AmountedDish } from '@entities/dish/api'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createUrl } from '@shared/base-api'

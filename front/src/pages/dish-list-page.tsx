@@ -1,9 +1,9 @@
-import { Label } from '@shared/ui/label'
+import { Label } from '@shared/kit/label'
 import { motion } from 'framer-motion'
-import { Header } from '@widgests/cabinet/shared/header'
+import { Header } from '@shared/header'
 import { UserProfile } from '@widgests/cabinet/dashboard/user-profile'
 import { ScrollRestoration, useParams } from 'react-router-dom'
-import { BackButton } from '@widgests/cabinet/shared/back-button'
+import { BackButton } from '@shared/kit/back-button'
 import { DishListEditor } from '@widgests/cabinet/menu'
 
 const LeftLabel = <Label className="light-block" leftButton={<BackButton />}>Меню</Label>

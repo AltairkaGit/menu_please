@@ -1,4 +1,4 @@
-import dishListSlice from "@entities/dish-list/model/dishListSlice"
+import dishListSlice from "@entities/menu/model/dishListSlice"
 import authSlice from "@entities/entrance/model/auth-slice"
 import { authService } from "@features/auth/service"
 import { dishService } from "@features/dish/service"

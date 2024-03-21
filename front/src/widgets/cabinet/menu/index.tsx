@@ -1,13 +1,13 @@
-import { DishList } from "@entities/dish-list/api"
-import { selectDishLists } from "@entities/dish-list/model/dishListSlice"
+import { DishList } from "@entities/menu/api"
+import { selectDishLists } from "@entities/menu/model/dishListSlice"
 import { AmountedDish, Meal } from "@entities/dish/api"
 import { Ratio } from "@entities/dish/ui/ratio"
 import { calcMealCalories } from "@features/menu/calc-meal-calories"
 import { calcMealNutrientsRatio } from "@features/menu/calc-meal-nutrients"
 import { useGetQuery } from "@features/menu/service"
-import { DishPortionControl } from "@features/menu/ui/dish-portion-control"
+import { DishPortionControl } from "@features/menu/dish-portion-control"
 import { useAppSelector } from "@shared/hooks"
-import { Block } from "@shared/ui/block"
+import { Block } from "@shared/kit/block"
 import { Cooking } from "@static/icons/cooking"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
@@ -16,7 +16,7 @@ import { MealSummary } from "./meal-summary"
 import { MealTabs } from "./meal-tabs"
 import { MealDishes } from "./meal-dishes"
 import { useDishSearchModal } from "@features/dish-search-modal/use-dish-search-modal"
-import { DishSearchModal } from "@features/dish-search-modal/ui"
+import { DishSearchModal } from "./dish-search-modal"
 
 const UI = ({dishList, openDishSearch}: {dishList: DishList, openDishSearch: (id: number, meal: Meal) => any}) => {
     const [meal, setMeal] = useState<Meal>(Meal.breakfast)
@@ -92,6 +92,6 @@ export const DishListEditor = ({id} : {id: number}) => {
 
     return <>        
         <UI dishList={dishList} openDishSearch={dishSearchModal.open} />
-        <DishSearchModal isOpen={dishSearchModal.isOpen} close={dishSearchModal.close} />
+        <DishSearchModal meal={dishSearchModal.meal} listId={dishSearchModal.id} isOpen={dishSearchModal.isOpen} close={dishSearchModal.close} />
     </> 
 }

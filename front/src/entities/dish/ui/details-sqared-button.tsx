@@ -3,10 +3,10 @@ import { Block } from "@shared/kit/block"
 import { ArrowFront } from "@static/icons/arrow-front"
 import { twMerge } from "tailwind-merge"
 
-export const DishDetailsButton = ({id, className}: {id: number, className?: string}) => (
+
+export const DishDetailsSqaredButton = ({id, className}: {id: number, className?: string}) => (
     <DishPageLink id={id}>
-        <Block className={twMerge("flex flex-col light-block px-2 py-4 items-center text-xs gap-1 font-medium", className)}>
-            Подробно
+        <Block className={twMerge("flex light-block items-center justify-center w-[3.625rem] h-[3.625rem]", className)}>
             <ArrowFront />
         </Block>
     </DishPageLink>

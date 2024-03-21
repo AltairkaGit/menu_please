@@ -1,6 +1,6 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
 import { DishTab } from "@entities/dish/ui/tab"
-import { AddDishTab } from "@features/menu/ui/add-dish-in-meal-button"
+import { AddDishTab } from "@features/menu/add-dish-in-meal-tab"
 import { AnimatePresence, motion } from "framer-motion"
 
 export const MealDishes = ({dishes, dish, meal, openModal, setDish}: 

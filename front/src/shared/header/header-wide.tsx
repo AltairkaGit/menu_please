@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { ReactNode } from "react"
-import { Label } from "@shared/ui/label"
+import { Label } from "@shared/kit/label"
 import clsx from "clsx"
 
 export const HeaderWide = ({LeftLabel, RightLabel} : {LeftLabel: ReactNode, RightLabel: ReactNode}) => {

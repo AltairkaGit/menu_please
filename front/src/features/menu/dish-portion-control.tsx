@@ -1,9 +1,9 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
-import { useChangeAmountMutation, useDeleteDishMutation } from "../service"
-import { DishPortionControl as UI } from "@entities/dish-list/ui/dish-portion-control"
+import { useChangeAmountMutation, useDeleteDishMutation } from "./service"
+import { DishPortionControl as UI } from "@entities/menu/ui/dish-portion-control"
 import { useDebouncedCallback } from "use-debounce"
 import { useAppDispatch } from "@shared/hooks"
-import { decreaseDishAmount, increaseDishAmount } from "@entities/dish-list/model/dishListSlice"
+import { decreaseDishAmount, increaseDishAmount } from "@entities/menu/model/dishListSlice"
 
 export const DishPortionControl = ({id, meal, dish}: {id: number, meal: Meal, dish: AmountedDish}) => {
     const dispatch = useAppDispatch()

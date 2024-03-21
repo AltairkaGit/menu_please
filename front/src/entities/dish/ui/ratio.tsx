@@ -1,4 +1,4 @@
-import { Block } from "@shared/ui/block"
+import { Block } from "@shared/kit/block"
 import { motion } from "framer-motion"
 import { twMerge } from "tailwind-merge"
 

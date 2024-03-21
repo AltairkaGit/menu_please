@@ -2,7 +2,7 @@ import { AmountedDish } from "../api"
 import { twMerge } from "tailwind-merge"
 import { AnimatePresence, motion } from "framer-motion"
 import { PlusMd } from "@static/icons/plus-md"
-import { Button } from "@shared/ui/button"
+import { Button } from "@shared/kit/button"
 
 export const DishTab = ({ dish, currentDish, setDish }: { dish: AmountedDish, currentDish: AmountedDish, setDish: (dish: AmountedDish) => any }) => {
         const active = dish==currentDish
