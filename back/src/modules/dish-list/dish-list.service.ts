@@ -27,17 +27,18 @@ export class DishListService {
         if (!rows) throw new BadRequestException(AppError.NO_DISH_LIST);
         const res = new DishListDto();
         res.id = dishListId;
-        const unique = new Set<number>();
-        rows.forEach(r => { unique.add(r.dishId) });
-        const dishes = await this.dishService.getDishesByIds([...unique.values()]);
-        const dishesDto = await this.dishService.getAmountedDishesDto(dishes);
-        const view = new Map(dishesDto.map(dto => [dto.id, dto]));
+        const uniqueDishes = await this.dishService.getDishesByIds(rows.map(r => r.dishId));
+        const uniqueDishesDto = await this.dishService.getAmountedDishesDto(uniqueDishes);
         const meal = new Map<Meal, AmountedDishDto[]>();
+        const view = uniqueDishesDto.reduce((map: any, dto) => {
+            if (dto.id) map[dto.id] = dto
+            return map
+        }, {})
         rows.forEach(row => {
             !meal.has(row.meal) && meal.set(row.meal, []);
-            const dto = view.get(row.dishId)
-            dto && (dto.amount = row.amount)
-            dto && meal.get(row.meal)?.push(dto);
+            const dto = JSON.parse(JSON.stringify(view[row.dishId]))
+            dto.amount = row.amount
+            meal.get(row.meal)?.push(dto)
         });
         res.breakfast = meal.get(Meal.breakfast) ?? []
         res.lunch = meal.get(Meal.lunch) ?? []
