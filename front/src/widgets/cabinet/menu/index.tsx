@@ -1,11 +1,10 @@
-import { DishList } from "@entities/menu/api"
-import { selectDishLists } from "@entities/menu/model/dishListSlice"
+import { selectDishList, selectDishListMealDish, selectDishLists } from "@entities/menu/model/dishListSlice"
 import { AmountedDish, Meal } from "@entities/dish/api"
 import { Ratio } from "@entities/dish/ui/ratio"
 import { calcMealCalories } from "@features/menu/calc-meal-calories"
 import { calcMealNutrientsRatio } from "@features/menu/calc-meal-nutrients"
 import { useGetQuery } from "@features/menu/service"
-import { DishPortionControl } from "@features/menu/dish-portion-control"
+import { DishPortionControl } from "@widgests/cabinet/menu/dish-portion-control"
 import { useAppSelector } from "@shared/hooks"
 import { Block } from "@shared/kit/block"
 import { Cooking } from "@static/icons/cooking"
@@ -17,81 +16,94 @@ import { MealTabs } from "./meal-tabs"
 import { MealDishes } from "./meal-dishes"
 import { useDishSearchModal } from "@features/dish-search-modal/use-dish-search-modal"
 import { DishSearchModal } from "./dish-search-modal"
+import { useParams } from "react-router-dom"
+import { NavigateMeal } from "@features/menu/navigate-meal"
+import { RollingDishPicture } from "@entities/dish/ui/rolling-picture"
 
-const UI = ({dishList, openDishSearch}: {dishList: DishList, openDishSearch: (id: number, meal: Meal) => any}) => {
-    const [meal, setMeal] = useState<Meal>(Meal.breakfast)
-    const [dish, setDish] = useState<AmountedDish>(dishList.breakfast[0])
-
-    useEffect(() => {
-        const d = dishList[meal].find(item => item.id == dish.id)
-        d && setDish(d)
-    }, [dishList])
-
-    let calories = calcMealCalories(dishList[meal])
-    let pfc = calcMealNutrientsRatio(dishList[meal])
-
-    const setMealTab = (meal: Meal) => {
-        setMeal(meal)
-        setDish(dishList[meal][0])
-    } 
-
-    const openModal = () => openDishSearch(dishList.id, meal)
-
-    return (
-        <Block className="flex flex-col xl:flex-row gap-12 min-h-[48rem]">
-            <motion.div className="flex-1 flex-grow-[7] flex flex-col justify-between">
-                <motion.div className="flex flex-col items-center md:items-stretch md:flex-row gap-14">
+const UI = ({id, meal, dish, dishes, pfc, calories, openDishSearch, navigateMeal, setDishId}: {
+    id: number
+    dish: AmountedDish | undefined,
+    meal: Meal
+    dishes: AmountedDish[], 
+    pfc: {p: number, f: number, c: number},
+    calories: number,
+    openDishSearch: () => any,
+    navigateMeal: (meal: Meal) => any,
+    setDishId: (dish: number) => any
+}) => (
+    <Block className="flex flex-col xl:flex-row gap-12 min-h-[48rem]">
+        <motion.div initial="init" animate="in" exit="out" className="flex-1 flex-grow-[7] flex flex-col justify-between">
+            <motion.div className="flex flex-col items-center md:items-stretch md:flex-row gap-14">
+                <AnimatePresence mode="wait">
+                {dish ? <>
+                    <RollingDishPicture dish={dish} meal={meal} />
+                    <motion.div key={`${dish.id}-${meal}-summary`} className="flex flex-col justify-between grow">
+                        <DishSummary className="!hidden md:!flex" dish={dish} />
+                        <DishPortionControl key={`${dish.id}-${meal}-control`} id={id} dish={dish} meal={meal} />
+                    </motion.div>
+                </> : null}
+                </AnimatePresence>
+            </motion.div>
+            <motion.div className="flex flex-col gap-7">
+                <MealDishes dishes={dishes} dish={dish} meal={meal} openModal={openDishSearch} setDishId={setDishId} />
+                <MealTabs meal={meal} setMeal={(meal: Meal) => navigateMeal(meal)} />
+            </motion.div>
+        </motion.div>
+        <motion.div className="flex-1 flex-grow-[4] flex flex-col justify-between items-center">
+            <motion.div className="self-stretch">
+                <Block className="flex light-block py-2 px-8 justify-between text-st items-center">
+                    <motion.div>
+                        Рецепт:
+                    </motion.div>
+                    <Cooking />
+                </Block>
                     {dish ? <AnimatePresence mode="wait">
-                        <motion.img key={`${dish.id}-${meal}-picture`} src={dish.picture} className="w-80 h-80 lg:w-[27rem] lg:h-[27rem]" variants={{in: {opacity: 1, scale: 1.2, rotate: 0}, out: {opacity: 0, scale: 0.5, rotate: "60deg"}}} initial="out" animate="in" exit="out" transition={{duration: 0.5}}/>    
-                        <motion.div key={`${dish.id}-${meal}-summary`} className="flex flex-col justify-between grow">
-                            <DishSummary className="!hidden md:!flex" dish={dish} />
-                            <DishPortionControl key={`${dish.id}-${meal}-control`} id={dishList.id} dish={dish} meal={meal} />
-                        </motion.div>
+                    <motion.div key={dish.id} className="my-8 px-8 text-2xl text-justify" variants={{in: {opacity: 1, y: 0}, out: {opacity: 0, y: "1rem"}}} initial="out" animate="in" exit="out" transition={{duration: 0.5}}>
+                        {dish.recipe}
+                    </motion.div>
                     </AnimatePresence> : null}
-                </motion.div>
-                <motion.div className="flex mt-8 flex-col gap-7">
-                    <MealDishes dishes={dishList[meal]} dish={dish} meal={meal} openModal={openModal} setDish={setDish} />
-                    <MealTabs meal={meal} setMeal={setMealTab} />
-                </motion.div>
             </motion.div>
-            <motion.div className="flex-1 flex-grow-[4] flex flex-col justify-between items-center">
-                <motion.div className="self-stretch">
-                    <Block className="flex light-block py-2 px-8 justify-between text-st items-center">
-                        <motion.div>
-                            Рецепт:
-                        </motion.div>
-                        <Cooking />
-                    </Block>
-                        {dish ? <AnimatePresence mode="wait">
-                        <motion.div key={dish.id} className="my-8 px-8 text-2xl text-justify" variants={{in: {opacity: 1, y: 0}, out: {opacity: 0, y: "1rem"}}} initial="out" animate="in" exit="out" transition={{duration: 0.5}}>
-                            {dish.recipe}
-                        </motion.div>
-                        </AnimatePresence> : null}
-                </motion.div>
-                <motion.div className="text-2xl w-full flex flex-col gap-8 items-center">
-                    <AnimatePresence mode="wait">
-                        {dish ? <AnimatePresence mode="wait">
-                        <Ratio key={dish.id} row proteins={`${dish.proteins}`} fats={`${dish.fats}`} carbo={`${dish.carbohydrates}`} />
-                        </AnimatePresence> : null}
-                    </AnimatePresence>                                      
-                    <MealSummary calories={calories} meal={meal} {...pfc} />
-                </motion.div>
+            <motion.div className="text-2xl w-full flex flex-col gap-8 items-center">
+                <AnimatePresence mode="wait">
+                    {dish ? <AnimatePresence mode="wait">
+                    <Ratio key={dish.id} row proteins={`${dish.proteins}`} fats={`${dish.fats}`} carbo={`${dish.carbohydrates}`} />
+                    </AnimatePresence> : null}
+                </AnimatePresence>                                      
+                <MealSummary calories={calories} meal={meal} {...pfc} />
             </motion.div>
-        </Block>
-    )
-}
+        </motion.div>
+    </Block>
+)
 
 export const DishListEditor = ({id} : {id: number}) => {
-    const {data, isError} = useGetQuery(id || 0)
     const dishSearchModal = useDishSearchModal()
-    if (isError) return <motion.div className="text-center text-4xl">Ой, что-то пошло не так</motion.div>
-    const lists = useAppSelector(selectDishLists)
-    if (!data) return null
-    const dishList = lists.find(list => list.id == data.id)
-    if (!dishList) return null
+    const params = useParams()
+    const meal = params["meal"] as Meal ?? Meal.breakfast 
 
-    return <>        
-        <UI dishList={dishList} openDishSearch={dishSearchModal.open} />
+    const {isError} = useGetQuery(id || 0)    
+    const dishList = useAppSelector(selectDishList(id))
+    const dishes = dishList && dishList[meal] 
+    const navigateMeal = NavigateMeal(id)
+
+    const currentDishId = dishes ? dishes[0]?.id : undefined
+    const [dishId, setDishId] = useState<number | undefined>(currentDishId)
+    const dish = useAppSelector(selectDishListMealDish(id, meal, dishId))
+
+    useEffect(() => {
+        if (!dish) setDishId(currentDishId)
+    }, [currentDishId])
+
+    if (isError) return <motion.div className="text-center text-4xl">Ой, что-то пошло не так</motion.div>
+    if (!dishes) return null    
+
+    return <>
+        <UI id={id} meal={meal} dish={dish} dishes={dishes} 
+            pfc={calcMealNutrientsRatio(dishes)} 
+            calories={calcMealCalories(dishes)}
+            openDishSearch={() => dishSearchModal.open(id, meal)}
+            navigateMeal={navigateMeal}
+            setDishId={setDishId}
+        />   
         <DishSearchModal meal={dishSearchModal.meal} listId={dishSearchModal.id} isOpen={dishSearchModal.isOpen} close={dishSearchModal.close} />
     </> 
 }

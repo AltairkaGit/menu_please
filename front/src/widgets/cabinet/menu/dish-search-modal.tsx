@@ -1,23 +1,43 @@
 import { Meal } from "@entities/dish/api"
+import { selectDishList } from "@entities/menu/model/dishListSlice"
+import { useAppSelector } from "@shared/hooks"
 import { DishListForModal } from "@widgests/dish/dish-list-for-modal"
 import { AnimatePresence, motion } from "framer-motion"
 import { ReactNode, useEffect } from "react"
 
 const variants = {
+    init: {
+        opacity: 0,
+        transition: {
+            duration: 0.25
+        }
+    },
     in: {
-        display: 'block'
+        opacity: 1,
+        transition: {
+            duration: 0.5,
+            delay: 0.5
+        }
     },
     out: {
-        display: 'none'
+        opacity: 0,
+        transition: {
+            duration: 0.5,
+            delay: 0.5
+        }
     }
 }
 
 const Modal = ({isOpen, body} : {isOpen: boolean, body: ReactNode}) => (
     <AnimatePresence mode="wait">
-            <motion.div animate={isOpen ? "in" : "out"} variants={variants} className="absolute z-20 top-28 h-[85dvh] light-block -left-4 -right-4 rounded-3xl p-12  overflow-y-auto">
-                {body}
-            </motion.div>
-        </AnimatePresence>
+        {
+            isOpen ?
+            <motion.div initial="init" animate="in" exit="out" variants={variants} className="absolute z-20 top-28 h-[85dvh] light-block -left-4 -right-4 rounded-3xl p-12  overflow-y-auto">
+            {body}
+        </motion.div> : null
+        }
+       
+    </AnimatePresence>
 )
 
 interface Search {
@@ -37,10 +57,14 @@ export const DishSearchModal = ({listId, meal, isOpen, close}: {listId: number, 
         return () => document.removeEventListener("keydown", handler)
     }, [])
 
+    const dishes = useAppSelector(selectDishList(listId))
+    if (!dishes) return null
+    const mealDishIds = new Set(dishes[meal].map(dish => dish.id))
+
     return (
         <Modal isOpen={isOpen} 
         
-            body={<DishListForModal listId={listId} meal={meal} />}
+            body={<DishListForModal mealDishIds={mealDishIds} listId={listId} meal={meal} />}
         />             
     )
 

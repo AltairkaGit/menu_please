@@ -1,5 +1,5 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
-import { useChangeAmountMutation, useDeleteDishMutation } from "./service"
+import { useChangeAmountMutation, useDeleteDishMutation } from "@features/menu/service"
 import { DishPortionControl as UI } from "@entities/menu/ui/dish-portion-control"
 import { useDebouncedCallback } from "use-debounce"
 import { useAppDispatch } from "@shared/hooks"
@@ -17,7 +17,7 @@ export const DishPortionControl = ({id, meal, dish}: {id: number, meal: Meal, di
     const increase = async () => {
         try {
             dispatch(increaseDishAmount({id, meal, dishId: dish.id}))
-            debouncedChange(dish.amount + 1)
+            debouncedChange(Math.min(dish.amount + 1, 12))
         } catch (err) {
 
         }
@@ -25,19 +25,18 @@ export const DishPortionControl = ({id, meal, dish}: {id: number, meal: Meal, di
     const decrease = async () => {
         try {
             dispatch(decreaseDishAmount({id, meal, dishId: dish.id}))
-            debouncedChange(dish.amount - 1)
+            debouncedChange(Math.max(dish.amount - 1, 0))
         } catch (err) {
 
         }
     }
     const remove = async () => {
         try {
+            //reset dish in useState
             deleteDish({id, body: {meal, dishId: dish.id}}).unwrap()
         } catch (err) {
         }
     }
-
-
 
     return <UI disabled={pending} amount={dish.amount} increase={increase} decrease={decrease} remove={remove} />
     

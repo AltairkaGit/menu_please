@@ -1,7 +1,7 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
 import { motion } from "framer-motion"
 import { twMerge } from "tailwind-merge"
-import { DishList } from "@entities/dish-list/api"
+import { DishList } from "@entities/menu/api"
 import { MealList } from "./item"
 
 const titles = {

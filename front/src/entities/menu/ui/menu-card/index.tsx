@@ -1,4 +1,4 @@
-import { DishList } from "@entities/dish-list/api"
+import { DishList } from "@entities/menu/api"
 import { Block } from "@shared/kit/block"
 import { Button } from "@shared/kit/button"
 import { Cross } from "@static/icons/cross"
@@ -15,7 +15,7 @@ const checkIsEmpty = (dishList: DishList) => dishList.breakfast.length == 0 && d
 const CardTemplate = ({ id, children, deleteList } : { id: number, children: ReactNode, deleteList: () => any}) => (
     <Block className="flex w-full flex-col lg:flex-row light-block mt-11 box-border min-h-80 justify-between items-center gap-5 pb-0 md:pb-12 lg:pb-0">
         <Block className='hidden md:block dark-block w-auto h-4 lg:w-8 lg:h-auto shrink-0 self-stretch' />
-        <Link className="flex w-full flex-col lg:flex-row " to={`/dish-list/${id}`}>
+        <Link className="flex w-full flex-col lg:flex-row " to={`/dish-list/${id}/breakfast`}>
             {children}
         </Link>
         <Button className="dark-block w-8 h-auto self-stretch hidden lg:flex" onClick={deleteList}><Cross className="stroke-white" /></Button>
@@ -24,7 +24,7 @@ const CardTemplate = ({ id, children, deleteList } : { id: number, children: Rea
 
 const EmptyList = ({id, deleteList}: {id: number, deleteList: () => any}) => (
     <CardTemplate id={id} deleteList={deleteList}>
-        <Link className="m-auto text-2xl flex gap-3" to={`/dish-list/${id}`}>
+        <Link className="m-auto text-2xl flex gap-3" to={`/dish-list/${id}/breakfast`}>
             Список пока пуст, выберите меню
             <Button className="dark-block w-8 h-8 flex lg:hidden" onClick={deleteList}><Cross className="stroke-white" /></Button>
         </Link>

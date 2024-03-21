@@ -1,5 +1,5 @@
 import { AmountedDish, Meal } from "@entities/dish/api"
-import { DishList } from "@entities/dish-list/api"
+import { DishList } from "@entities/menu/api"
 import { MenuListWide } from "./wide"
 import { MenuListCompact } from "./compact"
 import { motion } from "framer-motion"

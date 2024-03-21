@@ -16,10 +16,7 @@ const RatioUnit = ({title, value, row}: {title: string, value: string, row?: boo
 }
 
 export const Ratio = ({proteins, fats, carbo, row}: {proteins: string, fats: string, carbo: string, row?: boolean}) => (
-    <motion.div key={`${proteins}-${fats}-${carbo}`} 
-        className="flex gap-4" layout variants={{in: {opacity: 1, y: 0}, out: {opacity: 0, y: "1rem"}}}
-        initial="out" animate="in" exit="out" transition={{duration: 0.5}}
-    >
+    <motion.div key={`${proteins}-${fats}-${carbo}`} className="flex gap-4">
         <RatioUnit row={row} title="Б" value={proteins} />
         <RatioUnit row={row} title="Ж" value={fats} />
         <RatioUnit row={row} title="У" value={carbo} />

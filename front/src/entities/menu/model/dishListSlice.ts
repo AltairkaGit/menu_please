@@ -1,9 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit"
 import { DishList } from "../api"
 import { RootState } from "@shared/store"
 import { dishListService } from "@features/menu/service"
-import { Meal } from "@entities/dish/api"
-import { useSelector } from "react-redux"
+import { AmountedDish, Meal } from "@entities/dish/api"
 
 
 interface DishListState {
@@ -61,16 +60,24 @@ export const dishListSlice = createSlice({
         builder.addMatcher(dishListService.endpoints.addDish.matchFulfilled, (state, action) => {
             const {id, body} = action.meta.arg.originalArgs
             const {meal, dishId} = body
-            const list = state.lists.find(list => list.id == id)
-            if (!list) return
-            const dish = list[meal].find(item => item.id == dishId)
-            if (!dish) list[meal].push(action.payload)
+            state.lists = state.lists.map(list => {
+                if (list.id == id && !list[meal].find(dish => dish.id == dishId))
+                    list[meal].push(action.payload)
+                return list
+            })
         })
     }
 })
 
 export const selectDishLists = (state: RootState) => state.dishList.lists
-export const selectDishList = (state: RootState, id: number) => state.dishList.lists.find(list => list.id == id) ?? {id: -1, breakfast: [], lunch: [], dinner: []}
+export const selectDishList = (id: number) => createSelector((state: RootState) => state.dishList.lists.find(list => list.id == id), (list) => list)
+export const selectDishListMealDish = (id: number, meal: Meal, dishId?: number) => createSelector(
+    (state: RootState) => state.dishList.lists.find(list => list.id == id),
+    (list) => {
+        const dishes = list ? list[meal] : []
+        return dishes.find(dish => dish.id == dishId)
+    }
+)
 
 export const {
     increaseDishAmount,
