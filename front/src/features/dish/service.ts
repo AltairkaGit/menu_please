@@ -37,10 +37,18 @@ export const dishService = createApi({
             }
             return newItems
             }
+        }),
+        getDishById: builder.query<Dish, number>({
+            query: (id) => ({
+                url: `/${id}`,
+                method: 'GET',
+            }),
+            providesTags: (result) => result ? [({type: 'Dish', id: result.id})] : ['Dish']
         })
     })
 })
 
 export const {
-    useSearchQuery
+    useSearchQuery,
+    useGetDishByIdQuery
 } = dishService

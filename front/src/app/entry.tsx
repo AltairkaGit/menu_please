@@ -26,11 +26,9 @@ const App = () => {
             <Route path="register/dashboard" element={<RegisterDashboard />}/>
             <Route path="register/studio" element={<RegisterStudio />}/>
           </Route>
-          <Route path="dish" element={<DishPage/>}>
-            <Route path=":dishId" />
-          </Route>
           <Route element={<PrivateRoutes />}>
             <Route element={<BaseLayout />}>
+              <Route path="dish/:id" element={<DishPage/>} />
               <Route path="dashboard" element={<DashboardPage/>} />
               <Route path="dish-list/:id" element={<DishListPage />} />
               <Route path="studio" element={<StudioPage />} />

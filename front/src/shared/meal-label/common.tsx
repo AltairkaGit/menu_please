@@ -10,7 +10,7 @@ export const MealLabel = ({children}
         initial="out" animate="in" exit="ex"
         >
             <Round className="dark-block" />
-            <motion.div className="flex" layout variants={{in: {opacity: 1, x: 0}, out: {opacity: 0, x: "-0.5rem"}, ex: {opacity: 0, x: "0.5rem"}}} transition={{duration: 0.33}}>
+            <motion.div className="flex" layout variants={{in: {opacity: 1}, out: {opacity: 0}, ex: {opacity: 0}}} transition={{duration: 0.5}}>
                 {children}
             </motion.div>
             <Round className="invisible" />
