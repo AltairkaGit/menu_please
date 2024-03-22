@@ -5,38 +5,12 @@ import { DishListForModal } from "@widgests/dish/dish-list-for-modal"
 import { AnimatePresence, motion } from "framer-motion"
 import { ReactNode, useEffect } from "react"
 
-const variants = {
-    init: {
-        opacity: 0,
-        transition: {
-            duration: 0.25
-        }
-    },
-    in: {
-        opacity: 1,
-        transition: {
-            duration: 0.5,
-            delay: 0.5
-        }
-    },
-    out: {
-        opacity: 0,
-        transition: {
-            duration: 0.5,
-            delay: 0.5
-        }
-    }
-}
 
 const Modal = ({isOpen, body} : {isOpen: boolean, body: ReactNode}) => (
     <AnimatePresence mode="wait">
-        {
-            isOpen ?
-            <motion.div initial="init" animate="in" exit="out" variants={variants} className="absolute z-20 top-28 h-[85dvh] light-block -left-4 -right-4 rounded-3xl p-12  overflow-y-auto">
+        {isOpen ? <motion.div className="absolute z-20 top-28 h-[85dvh] light-block -left-4 -right-4 rounded-3xl p-12  overflow-y-auto">
             {body}
-        </motion.div> : null
-        }
-       
+        </motion.div> : null}
     </AnimatePresence>
 )
 
@@ -62,8 +36,7 @@ export const DishSearchModal = ({listId, meal, isOpen, close}: {listId: number, 
     const mealDishIds = new Set(dishes[meal].map(dish => dish.id))
 
     return (
-        <Modal isOpen={isOpen} 
-        
+        <Modal isOpen={isOpen}         
             body={<DishListForModal mealDishIds={mealDishIds} listId={listId} meal={meal} />}
         />             
     )

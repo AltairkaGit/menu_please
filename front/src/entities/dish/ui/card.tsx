@@ -5,6 +5,10 @@ import { ReactNode } from "react"
 import { Cooker } from "./cooker"
 
 const variants = {
+    init: {
+        opacity: 0, 
+        x: "-1rem"
+    },
     in: {
         opacity: 1, 
         x: 0

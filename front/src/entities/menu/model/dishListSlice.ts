@@ -70,11 +70,15 @@ export const dishListSlice = createSlice({
 })
 
 export const selectDishLists = (state: RootState) => state.dishList.lists
-export const selectDishList = (id: number) => createSelector((state: RootState) => state.dishList.lists.find(list => list.id == id), (list) => list)
+export const selectDishList = (id: number) => createSelector(
+    selectDishLists, 
+    (lists) => lists.find(list => list.id == id)
+)
 export const selectDishListMealDish = (id: number, meal: Meal, dishId?: number) => createSelector(
-    (state: RootState) => state.dishList.lists.find(list => list.id == id),
+    selectDishList(id),
     (list) => {
-        const dishes = list ? list[meal] : []
+        if (!list) return undefined
+        const dishes = list[meal]
         return dishes.find(dish => dish.id == dishId)
     }
 )
