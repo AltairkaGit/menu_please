@@ -15,7 +15,7 @@ export default {
       },
       colors: {
         'white': '#ffffff',
-        'black': '#000000',
+        'black': '#040404',
         'green': '#9AC95F',
       },
       fontSize: {

@@ -1,16 +1,15 @@
 import { Label } from '@shared/kit/label'
 import { Header } from '@shared/header'
 import { CookProfile } from '@widgests/cabinet/studio/cook-profile'
-import { CookerDishes } from '@widgests/cabinet/studio/cooker-dishes'
-import { motion } from 'framer-motion'
 import { PageBody } from '@shared/kit/page-body'
+import { DishCreator } from '@widgests/dish/dish-creator'
 
-const LeftLabel = <Label className="light-block" >Ваши блюда</Label>
+const LeftLabel = <Label className="light-block" >Создание</Label>
 
-export const StudioPage = () => <>
+export const DishCreatorPage = () => <>
     <Header LeftLabel={LeftLabel} RightLabel={<CookProfile/>} />
     <PageBody>
-        <CookerDishes />
+        <DishCreator />
     </PageBody>
 </>
         

@@ -44,11 +44,19 @@ export const dishService = createApi({
                 method: 'GET',
             }),
             providesTags: (result) => result ? [({type: 'Dish', id: result.id})] : ['Dish']
+        }),
+        getAllCookerDishes: builder.query<Dish[], number>({
+            query: (cookerId) => ({
+                url: `/cooker/${cookerId}`,
+                method: 'GET',
+            }),
+            providesTags: (result) => result ? result.map(item => ({type: 'Dish', id: item.id})) : ['Dish']
         })
     })
 })
 
 export const {
     useSearchQuery,
-    useGetDishByIdQuery
+    useGetDishByIdQuery,
+    useGetAllCookerDishesQuery
 } = dishService

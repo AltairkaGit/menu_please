@@ -1,5 +1,7 @@
 import { BaseLayout } from "@pages/base-layout"
 import { DashboardPage } from "@pages/dashboard-page"
+import { DishCreatorPage } from "@pages/dish-creator-page"
+import { DishEditorPage } from "@pages/dish-edittor-page"
 import { DishListPage } from "@pages/dish-list-page"
 import { DishPage } from "@pages/dish-page"
 import { MainPage } from "@pages/main-page"
@@ -17,7 +19,7 @@ const App = () => {
   const location = useLocation()
   
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" onExitComplete={() => void window.scrollTo({top: 0})}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" >
           <Route path="" element={<MainPage />}>
@@ -31,7 +33,10 @@ const App = () => {
               <Route path="dish/:id" element={<DishPage/>} />
               <Route path="dashboard" element={<DashboardPage/>} />
               <Route path="dish-list/:id" element={<DishListPage />} />
+
               <Route path="studio" element={<StudioPage />} />
+              <Route path="dish-edit/:dishId" element={<DishEditorPage />} />
+              <Route path="dish-create" element={<DishCreatorPage />} />
             </Route>
           </Route>          
         </Route>   

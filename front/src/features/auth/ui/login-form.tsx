@@ -15,15 +15,19 @@ const loginHooks = {
     [Role.cook]: authService.useLoginCookerMutation 
 }
 
+const nextPage = {
+    [Role.user]: '/dashboard',
+    [Role.cook]: '/studio'
+}
+
 export const LoginForm = ({ children, role } : { children: ReactNode, role: Role }) => {
     const navigate = useNavigate()
     const {register, handleSubmit, formState: { errors }} = useForm<Inputs>()
     const [login, _] = loginHooks[role]()
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        console.log('submitting login', data)
         try {
             await login(data).unwrap()
-            return navigate("/dashboard", {replace: true})
+            return navigate(nextPage[role], {replace: true})
         } catch(err) {
         }        
     }
