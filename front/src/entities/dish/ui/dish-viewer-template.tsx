@@ -55,7 +55,7 @@ export const DishViewerTemplate = ({
         <motion.div className="flex flex-col justify-between shrink-0 mx-6">
             <motion.div className="flex flex-col gap-6" variants={listVariants} initial="init" animate="in" exit="out">
                 <motion.h3 variants={itemVariants} transition={{duration: 0.5}}>Рекомендуем на:</motion.h3>
-                { meals.map(meal => <motion.div variants={itemVariants} transition={{duration: 0.5}}>
+                { meals.map((meal, i) => <motion.div key={i} variants={itemVariants} transition={{duration: 0.5}}>
                     {meal}
                 </motion.div>) }
             </motion.div>

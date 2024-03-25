@@ -3,7 +3,7 @@ import { Header } from '@shared/header'
 import { Label } from '@shared/kit/label'
 import { UserProfile } from '@widgests/cabinet/dashboard/user-profile'
 import { BackButton } from '@widgests/cabinet/shared/back-button'
-import { DishViewver } from '@widgests/dish/dish-viewer'
+import { DishViewer } from '@widgests/dish/dish-viewer'
 import { motion } from 'framer-motion'
 import { ScrollRestoration, useParams } from 'react-router-dom'
 
@@ -16,7 +16,7 @@ export const DishPage = () => {
     return <>
         <Header LeftLabel={LeftLabel} RightLabel={<UserProfile/>} />
         <motion.div className="pt-32 pb-8 xl:pb-0 relative">
-            <DishViewver 
+            <DishViewer
                 kind={dish?.kind ?? ''}
                 name={dish?.name ?? ''}
                 recipe={dish?.recipe ?? ''}
