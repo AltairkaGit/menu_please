@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 
 
 export const DishCreator = () => {
-    const {register} = useDishForm()
+    const {register, handleSubmit} = useDishForm()
     const cooker = useAppSelector(state => state.auth.username)
 
     
@@ -19,6 +19,7 @@ export const DishCreator = () => {
             recipe={<RecipeInput register={register} />}
             ratio={<RatioInput register={register} />}
             meals={MealCheckboxes({register})}
+            buttons={[]}
         />
     </motion.div>
 }

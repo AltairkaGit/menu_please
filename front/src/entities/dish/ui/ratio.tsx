@@ -1,8 +1,9 @@
 import { Block } from "@shared/kit/block"
 import { motion } from "framer-motion"
+import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
 
-const RatioUnit = ({title, value, row}: {title: string, value: string, row?: boolean}) => {
+const RatioUnit = ({title, value, row}: {title: string, value: string | ReactNode, row?: boolean}) => {
     return (
         <motion.div className={twMerge("flex gap-1", row ? 'flex-row' : 'flex-col' )}>
             <motion.div className="text-center min-w-6">{title}</motion.div>
@@ -15,7 +16,12 @@ const RatioUnit = ({title, value, row}: {title: string, value: string, row?: boo
     )
 }
 
-export const Ratio = ({proteins, fats, carbo, row}: {proteins: string, fats: string, carbo: string, row?: boolean}) => (
+export const Ratio = ({proteins, fats, carbo, row}: {
+    proteins: string | ReactNode, 
+    fats: string | ReactNode, 
+    carbo: string | ReactNode, 
+    row?: boolean, 
+}) => (
     <motion.div className="flex gap-4">
         <RatioUnit row={row} title="Б" value={proteins} />
         <RatioUnit row={row} title="Ж" value={fats} />

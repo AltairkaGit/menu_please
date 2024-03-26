@@ -36,25 +36,43 @@ export const RecipeInput = ({register}: {register: UseFormRegister<any>}) => (
     <motion.textarea className="box-border rounded-lg p-2 light-block text-2xl font-serif font-medium w-full h-64 resize-none placeholder:text-[#3a3a3a]" placeholder="Рецепт:" {...register("recipe", {required: true})} />
 )
 
-export const RatioInput = ({register}: {register: UseFormRegister<any>}) => (
-    <motion.div>
-        ratio
-    </motion.div>
-)
+const ratioInputClassName = "box-border w-[92%] h-[92%] text-center focus:placeholder:text-transparent"
+
+export const RatioInput = ({register}: {register: UseFormRegister<any>}) => {
+    const proteins = register("proteins", {required: true})
+    const fats = register("fats", {required: true})
+    const carbo = register("carbohydrates", {required: true})
+
+    return (
+        <motion.div className="text-xl font-medium">
+            <Ratio 
+                proteins={<motion.input className={ratioInputClassName} type="number" placeholder="0" min={0} max={100} {...proteins} />}
+                fats={<motion.input className={ratioInputClassName} type="number" placeholder="0" min={0} max={100} {...fats} />}
+                carbo={<motion.input className={ratioInputClassName} type="number" placeholder="0" min={0} max={100} {...carbo} />}
+                row
+            />
+        </motion.div>
+    )
+}
+
+const mealCheckboxClass = "select-none"
 
 export const MealCheckboxes = ({register}: {register: UseFormRegister<any>}) => [
-    <motion.div key="breakfast">
+    <motion.label className={mealCheckboxClass} key="breakfast" htmlFor="breakfastPicker">
         Завтрак
-    </motion.div>,
-    <motion.div key="lunch">
+        <motion.input type="checkbox" id="breakfastPicker" value="breakfast" {...register("meal")} />
+    </motion.label>,
+    <motion.label className={mealCheckboxClass} key="lunch" htmlFor="lunchPicker">
         Обед
-    </motion.div>,
-    <motion.div key="dinner">
+        <motion.input type="checkbox" id="lunchPicker" value="lunch" {...register("meal")} />
+    </motion.label>,
+    <motion.label className={mealCheckboxClass} key="dinner" htmlFor="dinnerPicker">
         Ужин
-    </motion.div>
+        <motion.input type="checkbox" id="dinnerPicker" value="dinner" {...register("meal")} />
+    </motion.label>,
 ]
 
-const pictureVariants = {
+const variants = {
     init: {
         opacity: 0,
         scale: 0.5,
@@ -63,21 +81,6 @@ const pictureVariants = {
         opacity: 1,
         scale: 1.1,
         rotate: 0
-    },
-    out: {
-        opacity: 0,
-        scale: 0.5,
-    }
-}
-
-const buttonVariants = {
-    init: {
-        opacity: 0,
-        scale: 0.5,
-    },
-    in: {
-        opacity: 1,
-        scale: 1,
     },
     out: {
         opacity: 0,
@@ -102,11 +105,11 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl w-[40rem] h-[40rem]")}>
         <AnimatePresence mode="wait">        
         {
-            picture && <motion.img className="scale-110" src={picture} variants={pictureVariants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
+            picture && <motion.img className="scale-110" src={picture} variants={variants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
         }
         {
             picture && <motion.button onClick={clearPicture} className="absolute top-5 right-5 dark-block rounded-full p-3" transition={{duration: 0.5}}
-                    whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} variants={buttonVariants} animate="in" initial="init" exit="out" >
+                    whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} variants={variants} animate="in" initial="init" exit="out" >
                     <Cross className="stroke-white" />
                 </motion.button>
         
@@ -114,7 +117,7 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
         {
             !picture && <motion.label className="flex flex-col gap-5 items-center justify-center rounded-full w-[35rem] h-[35rem] light-block cursor-pointer" 
                     htmlFor="picturePicker" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} transition={{duration: 0.5}}
-                    variants={pictureVariants} animate="in" initial="init" exit="out" >
+                    variants={variants} animate="in" initial="init" exit="out" >
                     <PlusLg />
                     <motion.div className="text-2xl font-medium">
                         Фото 600х600
@@ -126,4 +129,8 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
         <motion.input className="invisible absolute pointer-events-none" id="picturePicker" type="file" accept="image/png" {...field} />
     </motion.div>
     
+}
+
+export const submitButton = () => {
+
 }

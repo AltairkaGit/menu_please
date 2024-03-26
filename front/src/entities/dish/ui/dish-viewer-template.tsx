@@ -20,8 +20,12 @@ const itemVariants = {
     out: {y: "1rem", opacity: 0},
 }
 
+const defaultButtons = [
+    <Block className="dark-block aspect-video cursor-pointer hover:scale-105 transition-transform"/>
+]
+
 export const DishViewerTemplate = ({
-    picture, kind, cooker, name, recipe, ratio, meals
+    picture, kind, cooker, name, recipe, ratio, meals, buttons = defaultButtons
 }: {
     picture: ReactNode,
     kind: ReactNode,
@@ -29,7 +33,8 @@ export const DishViewerTemplate = ({
     name: ReactNode,
     recipe: ReactNode,
     ratio: ReactNode,
-    meals: ReactNode[]
+    meals: ReactNode[],
+    buttons?: ReactNode[]
 }) => (
     <motion.div className="flex justify-between">
         <motion.div className="flex gap-14">
@@ -59,9 +64,11 @@ export const DishViewerTemplate = ({
                     {meal}
                 </motion.div>) }
             </motion.div>
-            <motion.div variants={itemVariants} initial="init" animate="in" exit="out" transition={{duration: 0.5}}>
-                <Block className="dark-block aspect-video cursor-pointer hover:scale-105 transition-transform"/>
-            </motion.div>            
+            <motion.div variants={listVariants} initial="init" animate="in" exit="out">
+                { buttons.map((button, i) => <motion.div key={i} variants={itemVariants} transition={{duration: 0.5}}>
+                    {button}
+                </motion.div>) }
+            </motion.div>           
         </motion.div>
     </motion.div>
 )
