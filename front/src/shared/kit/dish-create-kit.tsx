@@ -7,6 +7,8 @@ import { PlusLg } from "@static/icons/plus-lg"
 import { Cross } from "@static/icons/cross"
 import { useState } from "react"
 import clsx from "clsx"
+import { PlusSm } from "@static/icons/plus-sm"
+import { twJoin, twMerge } from "tailwind-merge"
 
 interface DishData {
     kind: string, 
@@ -55,21 +57,32 @@ export const RatioInput = ({register}: {register: UseFormRegister<any>}) => {
     )
 }
 
-const mealCheckboxClass = "select-none"
+const mealToValue = {
+    [Meal.breakfast]:'Завтрак',
+    [Meal.lunch]:'Обед',
+    [Meal.dinner]:'Ужин',
+}
+
+const MealCheckbox = ({register, meal}: {register: UseFormRegister<any>, meal: Meal}) => {
+    const [checked, setChecked] = useState(false)
+    const onClick = () => {
+        setChecked(checked => !checked)
+    }
+    return <>
+        <motion.label onClick={onClick} onKeyPress={(e) => {if (e.key == "Enter") onClick()}} className="cursor-pointer justify-between px-5 rounded-full items-center flex box-border text-center py-2 text-xl select-none light-block w-full" 
+            htmlFor={`${meal}Picker`} whileHover={{scale: 0.98}} whileTap={{scale: 0.95}}>
+            <motion.div className="w-3 h-3 rounded-full dark-block" />  
+            {mealToValue[meal]}
+            <PlusSm className={twMerge("transition-transform", checked ? "rotate-45" : "")} />            
+        </motion.label>
+        <motion.input className="hidden" type="checkbox" id={`${meal}Picker`} value={meal} {...register("meal")} />
+    </>
+}
 
 export const MealCheckboxes = ({register}: {register: UseFormRegister<any>}) => [
-    <motion.label className={mealCheckboxClass} key="breakfast" htmlFor="breakfastPicker">
-        Завтрак
-        <motion.input type="checkbox" id="breakfastPicker" value="breakfast" {...register("meal")} />
-    </motion.label>,
-    <motion.label className={mealCheckboxClass} key="lunch" htmlFor="lunchPicker">
-        Обед
-        <motion.input type="checkbox" id="lunchPicker" value="lunch" {...register("meal")} />
-    </motion.label>,
-    <motion.label className={mealCheckboxClass} key="dinner" htmlFor="dinnerPicker">
-        Ужин
-        <motion.input type="checkbox" id="dinnerPicker" value="dinner" {...register("meal")} />
-    </motion.label>,
+    <MealCheckbox key={Meal.breakfast} register={register} meal={Meal.breakfast} />,
+    <MealCheckbox key={Meal.lunch} register={register} meal={Meal.lunch} />,
+    <MealCheckbox key={Meal.dinner} register={register} meal={Meal.dinner} />,
 ]
 
 const variants = {
@@ -105,10 +118,10 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl w-[40rem] h-[40rem]")}>
         <AnimatePresence mode="wait">        
         {
-            picture && <motion.img className="scale-110" src={picture} variants={variants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
+            picture && <motion.img key="picture" className="scale-110" src={picture} variants={variants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
         }
         {
-            picture && <motion.button onClick={clearPicture} className="absolute top-5 right-5 dark-block rounded-full p-3" transition={{duration: 0.5}}
+            picture && <motion.button key="delete" onClick={clearPicture} className="absolute top-5 right-5 dark-block rounded-full p-3" transition={{duration: 0.5}}
                     whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} variants={variants} animate="in" initial="init" exit="out" >
                     <Cross className="stroke-white" />
                 </motion.button>
@@ -131,6 +144,11 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     
 }
 
-export const submitButton = () => {
+export const SubmitButton = () => {
 
+    return (
+        <motion.button className="box-border text-3xl w-full rounded-lg dark-block px-5 py-5" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
+            Создать
+        </motion.button>
+    )
 }

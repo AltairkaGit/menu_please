@@ -1,7 +1,7 @@
 import { Cooker } from "@entities/dish/ui/cooker"
 import { DishViewerTemplate } from "@entities/dish/ui/dish-viewer-template"
 import { useAppSelector } from "@shared/hooks"
-import { KindInput, MealCheckboxes, NameInput, PicturePicker, RatioInput, RecipeInput, useDishForm } from "@shared/kit/dish-create-kit"
+import { KindInput, MealCheckboxes, NameInput, PicturePicker, RatioInput, RecipeInput, SubmitButton, useDishForm } from "@shared/kit/dish-create-kit"
 import { motion } from "framer-motion"
 
 
@@ -19,7 +19,7 @@ export const DishCreator = () => {
             recipe={<RecipeInput register={register} />}
             ratio={<RatioInput register={register} />}
             meals={MealCheckboxes({register})}
-            buttons={[]}
+            buttons={[<SubmitButton key="submitButton" />]}
         />
     </motion.div>
 }
