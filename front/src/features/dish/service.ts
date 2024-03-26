@@ -1,8 +1,8 @@
 import { Dish, Meal } from "@entities/dish/api"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { createUrl } from "@shared/base-api"
+import { DishData } from "@shared/kit/dish-create-kit"
 import { URLSearchParams } from "url"
-
 
 interface SearchParams {
     take: number
@@ -51,6 +51,33 @@ export const dishService = createApi({
                 method: 'GET',
             }),
             providesTags: (result) => result ? result.map(item => ({type: 'Dish', id: item.id})) : ['Dish']
+        }),
+        createDish: builder.mutation<Dish, DishData>({
+            query: (data) => {
+                console.log(data)
+                const fd = new FormData()
+                fd.append("file", data.file)
+                fd.append("name", data.name)
+                fd.append("kind", data.kind)
+                fd.append("recipe", data.recipe)
+                fd.append("proteins", `${data.p}`)
+                fd.append("fats", `${data.f}`)
+                fd.append("carbohydrates", `${data.c}`)
+                data.meal_breakfast && fd.append("categories", "breakfast")
+                data.meal_lunch && fd.append("categories", "lunch")
+                data.meal_dinner && fd.append("categories", "dinner")
+                for (const [k,  v] of fd.entries())
+                    console.log(k, v)
+                    console.log("------------")
+                return {
+                    url: '',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    body: fd
+                }
+            }
         })
     })
 })
@@ -58,5 +85,6 @@ export const dishService = createApi({
 export const {
     useSearchQuery,
     useGetDishByIdQuery,
-    useGetAllCookerDishesQuery
+    useGetAllCookerDishesQuery,
+    useCreateDishMutation
 } = dishService

@@ -8,17 +8,19 @@ import { Cross } from "@static/icons/cross"
 import { useState } from "react"
 import clsx from "clsx"
 import { PlusSm } from "@static/icons/plus-sm"
-import { twJoin, twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge"
 
-interface DishData {
+export interface DishData {
     kind: string, 
     name: string, 
     recipe: string,
-    picture: string, 
-    meals: Meal[], 
+    file: string,
     p: number, 
     f: number, 
-    c: number
+    c: number,
+    meal_breakfast: boolean,
+    meal_lunch: boolean,
+    meal_dinner: boolean,
 }
 
 export const useDishForm = () => {
@@ -41,9 +43,9 @@ export const RecipeInput = ({register}: {register: UseFormRegister<any>}) => (
 const ratioInputClassName = "box-border w-[92%] h-[92%] text-center focus:placeholder:text-transparent"
 
 export const RatioInput = ({register}: {register: UseFormRegister<any>}) => {
-    const proteins = register("proteins", {required: true})
-    const fats = register("fats", {required: true})
-    const carbo = register("carbohydrates", {required: true})
+    const proteins = register("p", {required: true})
+    const fats = register("f", {required: true})
+    const carbo = register("c", {required: true})
 
     return (
         <motion.div className="text-xl font-medium">
@@ -64,19 +66,23 @@ const mealToValue = {
 }
 
 const MealCheckbox = ({register, meal}: {register: UseFormRegister<any>, meal: Meal}) => {
+    const name = `meal_${meal}`
+    const field = register(name)
     const [checked, setChecked] = useState(false)
-    const onClick = () => {
-        setChecked(checked => !checked)
-    }
-    return <>
-        <motion.label onClick={onClick} onKeyPress={(e) => {if (e.key == "Enter") onClick()}} className="cursor-pointer justify-between px-5 rounded-full items-center flex box-border text-center py-2 text-xl select-none light-block w-full" 
+    
+    const className = twMerge(
+        "transition-all duration-500 cursor-pointer justify-between px-5 rounded-full items-center flex box-border text-center py-2 text-xl select-none w-full",
+        checked ? "dark-block" : "light-block"
+    )
+    return <motion.div className="relative">
+        <motion.label onClick={(e) => void setChecked(!checked)} className={className} 
             htmlFor={`${meal}Picker`} whileHover={{scale: 0.98}} whileTap={{scale: 0.95}}>
-            <motion.div className="w-3 h-3 rounded-full dark-block" />  
+            <motion.div className={twMerge("w-3 h-3 rounded-full transition-all duration-500", checked ? "light-block" : "dark-block")} />  
             {mealToValue[meal]}
-            <PlusSm className={twMerge("transition-transform", checked ? "rotate-45" : "")} />            
+            <PlusSm className={twMerge("transition-all duration-500", checked ? "rotate-45 fill-white" : "")} />            
         </motion.label>
-        <motion.input className="hidden" type="checkbox" id={`${meal}Picker`} value={meal} {...register("meal")} />
-    </>
+        <motion.input className="absolute invisible top-0 right-0" type="checkbox" id={`${meal}Picker`} {...field} />
+    </motion.div>
 }
 
 export const MealCheckboxes = ({register}: {register: UseFormRegister<any>}) => [
@@ -104,7 +110,7 @@ const variants = {
 
 export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     const [picture, setPicture] = useState<any>(null)
-    const field = register("picture", {required: true})
+    const field = register("file", {required: true})
     field.onChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
             setPicture(URL.createObjectURL(e.target.files[0]))
@@ -144,11 +150,8 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     
 }
 
-export const SubmitButton = () => {
-
-    return (
-        <motion.button className="box-border text-3xl w-full rounded-lg dark-block px-5 py-5" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
-            Создать
-        </motion.button>
-    )
-}
+export const SubmitButton = ({disabled}: {disabled: boolean}) => (
+    <motion.button disabled={disabled} type="submit" className="box-border text-3xl w-full rounded-lg dark-block px-5 py-5" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
+        Создать
+    </motion.button>
+)
