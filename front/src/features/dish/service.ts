@@ -78,7 +78,8 @@ export const dishService = createApi({
                     method: 'POST',
                     body: dishFormToFormData(data)
                 }
-            }
+            },
+            invalidatesTags: (result) => ['Dish']
         }),
         updateDish: builder.mutation<Dish, DishForm & {id: number}>({
             query: (data) => {               

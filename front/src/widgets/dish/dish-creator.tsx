@@ -2,7 +2,7 @@ import { Cooker } from "@entities/dish/ui/cooker"
 import { DishViewerTemplate } from "@entities/dish/ui/dish-viewer-template"
 import { dishService } from "@features/dish/service"
 import { useAppSelector } from "@shared/hooks"
-import { DishData, KindInput, MealCheckboxes, NameInput, PicturePicker, RatioInput, RecipeInput, SubmitButton, useDishForm } from "@shared/kit/dish-create-kit"
+import { CreateButton, DishData, KindInput, MealCheckboxes, NameInput, PicturePicker, RatioInput, RecipeInput, useDishForm } from "@shared/kit/dish-create-kit"
 import { motion } from "framer-motion"
 import { useRef } from "react"
 import { SubmitHandler } from "react-hook-form"
@@ -25,14 +25,14 @@ export const DishCreator = () => {
     
     return <motion.form onSubmit={handleSubmit(onSubmit)} className="pt-6">
         <DishViewerTemplate 
-            picture={<PicturePicker pictureRef={picture} register={register} />}
+            picture={<PicturePicker initial={null} pictureRef={picture} register={register} />}
             kind={<KindInput register={register} />}
             cooker={<Cooker name={cooker} />}
             name={<NameInput register={register} />}
             recipe={<RecipeInput register={register} />}
             ratio={<RatioInput register={register} />}
-            meals={MealCheckboxes({register})}
-            buttons={[<SubmitButton disabled={isLoading}  key="submitButton">Создать</SubmitButton>]}
+            meals={MealCheckboxes({register, init: {}})}
+            buttons={[<CreateButton disabled={isLoading}  key="createButton"/>]}
         />
     </motion.form>
 }

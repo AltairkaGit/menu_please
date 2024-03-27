@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { Ratio } from "@entities/dish/ui/ratio"
 import { PlusLg } from "@static/icons/plus-lg"
 import { Cross } from "@static/icons/cross"
-import { MutableRefObject, ReactNode, Ref, useState } from "react"
+import { MutableRefObject, ReactNode, Ref, useEffect, useState } from "react"
 import clsx from "clsx"
 import { PlusSm } from "@static/icons/plus-sm"
 import { twMerge } from "tailwind-merge"
@@ -25,20 +25,8 @@ export interface DishData {
 
 export const useDishForm = (initial?: Dish) => {
     
-    const { register, handleSubmit, formState } = useForm<DishData>({defaultValues: initial ? {
-        kind: initial.kind,
-        name: initial.name,
-        recipe: initial.recipe,
-        file: initial.picture,
-        p: initial.proteins,
-        f: initial.fats,
-        c: initial.carbohydrates,
-        meal_breakfast: !initial.categories.find(meal => meal == Meal.breakfast),
-        meal_lunch: !initial.categories.find(meal => meal == Meal.lunch),
-        meal_dinner: !initial.categories.find(meal => meal == Meal.dinner)
-    } : undefined})
-    console.log(formState, initial)
-    return { register, handleSubmit }
+    const { register, handleSubmit, ...rest } = useForm<DishData>()
+    return { register, handleSubmit, rest }
 }
 
 export const NameInput = ({register}: {register: UseFormRegister<any>}) => (
@@ -78,11 +66,15 @@ const mealToValue = {
     [Meal.dinner]:'Ужин',
 }
 
-const MealCheckbox = ({register, meal}: {register: UseFormRegister<any>, meal: Meal}) => {
+const MealCheckbox = ({register, meal, init = false}: {register: UseFormRegister<any>, meal: Meal, init?: boolean}) => {
     const name = `meal_${meal}`
     const field = register(name)
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(init)
     
+    useEffect(() => {
+        setChecked(init)
+    }, [init])
+
     const className = twMerge(
         "transition-all duration-500 cursor-pointer justify-between px-5 rounded-full items-center flex box-border text-center py-2 text-xl select-none w-full",
         checked ? "dark-block" : "light-block"
@@ -98,10 +90,10 @@ const MealCheckbox = ({register, meal}: {register: UseFormRegister<any>, meal: M
     </motion.div>
 }
 
-export const MealCheckboxes = ({register}: {register: UseFormRegister<any>}) => [
-    <MealCheckbox key={Meal.breakfast} register={register} meal={Meal.breakfast} />,
-    <MealCheckbox key={Meal.lunch} register={register} meal={Meal.lunch} />,
-    <MealCheckbox key={Meal.dinner} register={register} meal={Meal.dinner} />,
+export const MealCheckboxes = ({register, init}: {register: UseFormRegister<any>, init: { breakfast?: boolean, lunch?: boolean, dinner?: boolean}}) => [
+    <MealCheckbox init={init.breakfast} key={Meal.breakfast} register={register} meal={Meal.breakfast} />,
+    <MealCheckbox init={init.lunch} key={Meal.lunch} register={register} meal={Meal.lunch} />,
+    <MealCheckbox init={init.dinner} key={Meal.dinner} register={register} meal={Meal.dinner} />,
 ]
 
 const variants = {
@@ -121,17 +113,15 @@ const variants = {
 }
 
 
-export const PicturePicker = ({register, pictureRef}: {register: UseFormRegister<any>, pictureRef: MutableRefObject<any>}) => {
-    const [picture, setPicture] = useState<any>(null)
-    const field = register("file", {required: true})
-    //i guess it should be removed kind of and it will be working, buuut, i don't know how to retreive picture
-    //maybe i can pass ref here from outside and store e.target.files[0] here, then pass it in submit into redux action
-    //and then pass it in form data, so looks like a solution
+export const PicturePicker = ({register, pictureRef, initial}: {register: UseFormRegister<any>, pictureRef: MutableRefObject<any>, initial: string | null}) => {
+    const [picture, setPicture] = useState<any>(initial)
+    const field = register("file")
     field.onChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
             const picture = e.target.files[0]
             setPicture(URL.createObjectURL(picture))
             pictureRef.current = picture
+            console.log(picture)
           }
     }
 
@@ -140,6 +130,10 @@ export const PicturePicker = ({register, pictureRef}: {register: UseFormRegister
         setPicture(picture)
         pictureRef.current = picture
     }
+
+    useEffect(() => {
+        if (initial) setPicture(initial)
+    }, [initial])
 
     return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl w-[40rem] h-[40rem]")}>
         <AnimatePresence mode="wait">        
@@ -170,8 +164,26 @@ export const PicturePicker = ({register, pictureRef}: {register: UseFormRegister
     
 }
 
-export const SubmitButton = ({disabled, children}: {disabled: boolean, children: ReactNode}) => (
-    <motion.button disabled={disabled} type="submit" className="box-border text-3xl w-full rounded-lg dark-block px-5 py-5" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
+const Button = ({disabled, children, type, className}: {disabled: boolean, children: ReactNode, type: "button" | "submit", className: string}) => (
+    <motion.button disabled={disabled} type={type} className={twMerge("box-border text-3xl w-full rounded-lg  px-5 py-4", className)} whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
         {children}
     </motion.button>
+)
+
+export const CreateButton = ({disabled}: {disabled: boolean}) => (
+    <Button disabled={disabled} type="submit" className="dark-block">
+        Создать
+    </Button>
+)
+
+export const UpdateButton = ({disabled}: {disabled: boolean}) => (
+    <motion.button form="update-dish-form" type="submit" className={twMerge("box-border text-3xl w-full rounded-lg dark-block px-5 py-4")} whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
+        Сохранить
+    </motion.button>
+)
+
+export const DeleteButton = ({disabled, remove}: {disabled: boolean, remove: () => any}) => (
+    <Button disabled={disabled} type="button" className="bg-red-600 transition-colors duration-500 text-white">
+        Удалить
+    </Button>
 )
