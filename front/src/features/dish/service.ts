@@ -2,7 +2,7 @@ import { Dish, Meal } from "@entities/dish/api"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { createUrl } from "@shared/base-api"
 import { DishData } from "@shared/kit/dish-create-kit"
-import { URLSearchParams } from "url"
+import { MutableRefObject } from "react"
 
 interface SearchParams {
     take: number
@@ -13,14 +13,33 @@ interface SearchParams {
     ord?: string
 }
 
+interface DishForm extends DishData {
+    picture: MutableRefObject<any>
+}
+
+const dishFormToFormData = (data: DishForm) => {
+    const fd = new FormData()
+    fd.append("file", data.picture.current as Blob)
+    fd.append("name", data.name)
+    fd.append("kind", data.kind)
+    fd.append("recipe", data.recipe)
+    fd.append("proteins", `${data.p}`)
+    fd.append("fats", `${data.f}`)
+    fd.append("carbohydrates", `${data.c}`)
+    data.meal_breakfast && fd.append("categories", "breakfast")
+    data.meal_lunch && fd.append("categories", "lunch")
+    data.meal_dinner && fd.append("categories", "dinner")
+    return fd
+}
+
 export const dishService = createApi({
     reducerPath: 'service/dish',
     baseQuery: fetchBaseQuery({ baseUrl: createUrl('dish'), credentials: "include" }),
     tagTypes: ['Dish'],
     endpoints: (builder) => ({
         search: builder.query<Dish[], SearchParams>({
-            query: (queryParams) => ({
-                url: `?meal=${queryParams.meal}&skip=${queryParams.skip ?? 0}&take=${queryParams.take ?? 0}`,
+            query: (qp) => ({
+                url: `?meal=${qp.meal}&skip=${qp.skip ?? 0}&take=${qp.take ?? 0}&ord=${qp.ord ?? "createdAt"}&dir=${qp.sort ?? "desc"}`,
                 method: 'GET',
             }),
             serializeQueryArgs: ({ queryArgs }) => {
@@ -52,32 +71,33 @@ export const dishService = createApi({
             }),
             providesTags: (result) => result ? result.map(item => ({type: 'Dish', id: item.id})) : ['Dish']
         }),
-        createDish: builder.mutation<Dish, DishData>({
-            query: (data) => {
-                console.log(data)
-                const fd = new FormData()
-                fd.append("file", data.file)
-                fd.append("name", data.name)
-                fd.append("kind", data.kind)
-                fd.append("recipe", data.recipe)
-                fd.append("proteins", `${data.p}`)
-                fd.append("fats", `${data.f}`)
-                fd.append("carbohydrates", `${data.c}`)
-                data.meal_breakfast && fd.append("categories", "breakfast")
-                data.meal_lunch && fd.append("categories", "lunch")
-                data.meal_dinner && fd.append("categories", "dinner")
-                for (const [k,  v] of fd.entries())
-                    console.log(k, v)
-                    console.log("------------")
+        createDish: builder.mutation<Dish, DishForm>({
+            query: (data) => {               
                 return {
                     url: '',
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    body: fd
+                    body: dishFormToFormData(data)
                 }
             }
+        }),
+        updateDish: builder.mutation<Dish, DishForm & {id: number}>({
+            query: (data) => {               
+                return {
+                    url: `/${data.id}`,
+                    method: 'PUT',
+                    body: dishFormToFormData(data)
+                }
+            },
+            invalidatesTags: (result) => result ? [({type: 'Dish', id: result.id})] : ['Dish']
+        }),
+        deleteDish: builder.mutation<Dish, number>({
+            query: (id) => {               
+                return {
+                    url: `/${id}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags: (result) => result ? [({type: 'Dish', id: result.id})] : ['Dish']
         })
     })
 })
@@ -86,5 +106,7 @@ export const {
     useSearchQuery,
     useGetDishByIdQuery,
     useGetAllCookerDishesQuery,
-    useCreateDishMutation
+    useCreateDishMutation,
+    useUpdateDishMutation,
+    useDeleteDishMutation
 } = dishService

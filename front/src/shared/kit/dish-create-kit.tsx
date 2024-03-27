@@ -1,11 +1,11 @@
 import { UseFormRegister } from "react-hook-form"
 import { AnimatePresence, motion } from "framer-motion"
-import { Meal } from "@entities/dish/api"
+import { Dish, Meal } from "@entities/dish/api"
 import { useForm } from "react-hook-form"
 import { Ratio } from "@entities/dish/ui/ratio"
 import { PlusLg } from "@static/icons/plus-lg"
 import { Cross } from "@static/icons/cross"
-import { useState } from "react"
+import { MutableRefObject, ReactNode, Ref, useState } from "react"
 import clsx from "clsx"
 import { PlusSm } from "@static/icons/plus-sm"
 import { twMerge } from "tailwind-merge"
@@ -23,8 +23,21 @@ export interface DishData {
     meal_dinner: boolean,
 }
 
-export const useDishForm = () => {
-    const { register, handleSubmit } = useForm<DishData>()
+export const useDishForm = (initial?: Dish) => {
+    
+    const { register, handleSubmit, formState } = useForm<DishData>({defaultValues: initial ? {
+        kind: initial.kind,
+        name: initial.name,
+        recipe: initial.recipe,
+        file: initial.picture,
+        p: initial.proteins,
+        f: initial.fats,
+        c: initial.carbohydrates,
+        meal_breakfast: !initial.categories.find(meal => meal == Meal.breakfast),
+        meal_lunch: !initial.categories.find(meal => meal == Meal.lunch),
+        meal_dinner: !initial.categories.find(meal => meal == Meal.dinner)
+    } : undefined})
+    console.log(formState, initial)
     return { register, handleSubmit }
 }
 
@@ -108,17 +121,24 @@ const variants = {
 }
 
 
-export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
+export const PicturePicker = ({register, pictureRef}: {register: UseFormRegister<any>, pictureRef: MutableRefObject<any>}) => {
     const [picture, setPicture] = useState<any>(null)
     const field = register("file", {required: true})
+    //i guess it should be removed kind of and it will be working, buuut, i don't know how to retreive picture
+    //maybe i can pass ref here from outside and store e.target.files[0] here, then pass it in submit into redux action
+    //and then pass it in form data, so looks like a solution
     field.onChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
-            setPicture(URL.createObjectURL(e.target.files[0]))
+            const picture = e.target.files[0]
+            setPicture(URL.createObjectURL(picture))
+            pictureRef.current = picture
           }
     }
 
     const clearPicture = () => {
-        setPicture(null)
+        const picture = null
+        setPicture(picture)
+        pictureRef.current = picture
     }
 
     return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl w-[40rem] h-[40rem]")}>
@@ -150,8 +170,8 @@ export const PicturePicker = ({register}: {register: UseFormRegister<any>}) => {
     
 }
 
-export const SubmitButton = ({disabled}: {disabled: boolean}) => (
+export const SubmitButton = ({disabled, children}: {disabled: boolean, children: ReactNode}) => (
     <motion.button disabled={disabled} type="submit" className="box-border text-3xl w-full rounded-lg dark-block px-5 py-5" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
-        Создать
+        {children}
     </motion.button>
 )
