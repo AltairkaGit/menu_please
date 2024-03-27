@@ -55,7 +55,7 @@ export class DishService {
     } 
 
     async getCookerDishes(cookerId: number) : Promise<Dish[]> {
-        return await this.dishRepository.findAll({where: { cookerId } });
+        return await this.dishRepository.findAll({where: { cookerId }, order: [[ "createdAt", "desc" ]] });
     }
 
     async getDishes({ take, skip, meal, ord = 'name', dir = 'asc', name = '', kind = ''}: {
