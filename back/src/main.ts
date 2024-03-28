@@ -15,6 +15,14 @@ async function bootstrap() {
   app.use('/public', express.static(join(__dirname, '..', 'public')));
   app.use(cookieParser());
 
+  app.enableCors({
+    origin: [
+      'http://localhost:5173'
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    credentials: true
+  })
+
   await app.listen(port);
 }
 bootstrap();

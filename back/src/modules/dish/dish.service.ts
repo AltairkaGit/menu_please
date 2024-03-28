@@ -55,7 +55,7 @@ export class DishService {
     } 
 
     async getCookerDishes(cookerId: number) : Promise<Dish[]> {
-        return await this.dishRepository.findAll({where: { cookerId } });
+        return await this.dishRepository.findAll({where: { cookerId }, order: [[ "createdAt", "desc" ]] });
     }
 
     async getDishes({ take, skip, meal, ord = 'name', dir = 'asc', name = '', kind = ''}: {
@@ -103,11 +103,13 @@ export class DishService {
         return dish;
     }
 
-    async updateDish(picture: Express.Multer.File, {categories, tutorial, ...body}: CreateDishFormDto, cookerId: number, dishId: number) : Promise<Dish> {
+    async updateDish({categories, tutorial, ...body}: CreateDishFormDto, cookerId: number, dishId: number, picture?: Express.Multer.File) : Promise<Dish> {
         const dish = await this.dishRepository.findOne({where: {id: dishId}});
         if (!dish) throw new BadRequestException(AppError.NO_DISH);
-        const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
-        dish.picture = url;
+        if (picture) {
+            const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
+            dish.picture = url;
+        }        
         dish.kind = body.kind;
         dish.name = body.name;
         dish.proteins = Number(body.proteins);
@@ -126,7 +128,7 @@ export class DishService {
     async removeDish(dish: Dish) : Promise<void> {
         await this.dishRepository.destroy({
             where: {
-                dishId: dish.id
+                id: dish.id
             }
         });
     }

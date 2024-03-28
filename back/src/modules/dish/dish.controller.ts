@@ -58,20 +58,21 @@ export class DishController {
     }
 
     @Put(":id")
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtGuard, RolesGuard, DishOwnerGuard)
     @Roles(Role.Cooker)
     @UseInterceptors(FileInterceptor('file'))
-    async updateDish(@UploadedFile(
+    async updateDish(@Body() body: CreateDishFormDto, @Req() req: any, @Param('id') dishId: number, @UploadedFile(
         new ParseFilePipeBuilder()
             .addFileTypeValidator({
                 fileType: 'png',
             })
             .build({
+                fileIsRequired: false,
                 errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
             }),
-    ) picture: Express.Multer.File, @Body() body: CreateDishFormDto, @Req() req: any, @Param('id') dishId: number) {
+    ) picture?: Express.Multer.File) {
         const { user } = req;
-        const dish = await this.dishService.updateDish(picture, body, user.userId, dishId);
+        const dish = await this.dishService.updateDish(body, user.userId, dishId, picture);
         return this.dishService.getDishDto(dish);
     }
 

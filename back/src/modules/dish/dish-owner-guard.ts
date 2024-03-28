@@ -8,8 +8,8 @@ export class DishOwnerGuard implements CanActivate {
 ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const { user, body } = context.switchToHttp().getRequest();
-    const { id } = body;
+    const { user, params } = context.switchToHttp().getRequest();
+    const id = params.id;
     const dish = await this.dishService.getDish(id);
     if (dish.cookerId != user.userId) return false;
     return true;
