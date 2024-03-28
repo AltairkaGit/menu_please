@@ -23,12 +23,12 @@ export const DishViewer = ({kind, name, recipe, cooker, picture, meals, p, f, c}
     c: number
 }) => (
     <DishViewerTemplate 
-        picture={<motion.img src={picture} className="w-[37.5rem] h-[37.5rem] scale-110 -translate-y-8" />}
-        kind={<motion.h2 className="font-display">{kind}</motion.h2>}
+        picture={<motion.img src={picture} className="w-full h-full"/>}
+        kind={<motion.div className="font-display">{kind}</motion.div>}
         cooker={<Cooker name={cooker} />}
-        name={ <motion.h2 className="font-serif">{name}</motion.h2>}
-        recipe={<motion.article className="text-pretty text-3xl font-medium">{recipe}</motion.article>}
-        ratio={<motion.div className="text-3xl"><Ratio row proteins={`${p}`} fats={`${f}`} carbo={`${c}`} /></motion.div>}
+        name={ <motion.div className="font-serif">{name}</motion.div>}
+        recipe={<motion.article>{recipe}</motion.article>}
+        ratio={<motion.div><Ratio row proteins={`${p}`} fats={`${f}`} carbo={`${c}`} /></motion.div>}
         meals={meals.map(meal => <MealLabel>{mealsMap[meal]}</MealLabel>)}
     />
 )

@@ -14,12 +14,12 @@ interface SearchParams {
 }
 
 interface DishForm extends DishData {
-    picture: MutableRefObject<any>
+    picture?: Blob
 }
 
 const dishFormToFormData = (data: DishForm) => {
     const fd = new FormData()
-    fd.append("file", data.picture.current as Blob)
+    fd.append("file", data.picture as any)
     fd.append("name", data.name)
     fd.append("kind", data.kind)
     fd.append("recipe", data.recipe)

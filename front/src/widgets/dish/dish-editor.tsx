@@ -20,7 +20,8 @@ export const DishEditor = () => {
     const [updateDish, updating] = dishService.useUpdateDishMutation()
     const [deleteDish, deleting] = dishService.useDeleteDishMutation()
     const isLoading = updating.isLoading || deleting.isLoading
-    const picture = useRef<any>(null)
+    const [picture, setPicture] = useState<Blob | undefined>(undefined)
+    const [pictureSrc, setSrc] = useState<string>()
     const onSubmit: SubmitHandler<DishData> = async (data) => {
         try {
             await updateDish({id, ...data, picture}).unwrap()
@@ -43,11 +44,12 @@ export const DishEditor = () => {
     useEffect(() => {
         if (dish) {
             const meals = {
-                breakfast: !dish?.categories.find(meal => meal == Meal.breakfast),
-                lunch: !dish?.categories.find(meal => meal == Meal.lunch),
-                dinner: !dish?.categories.find(meal => meal == Meal.dinner),
+                breakfast: Boolean(dish?.categories.find(meal => meal == Meal.breakfast)),
+                lunch: Boolean(dish?.categories.find(meal => meal == Meal.lunch)),
+                dinner: Boolean(dish?.categories.find(meal => meal == Meal.dinner)),
             }
             setMeals(meals)
+            setSrc(dish.picture)
             rest.setValue("kind", dish.kind)
             rest.setValue("name", dish.name)
             rest.setValue("recipe", dish.recipe)
@@ -58,14 +60,6 @@ export const DishEditor = () => {
             rest.setValue("meal_breakfast", meals.breakfast)
             rest.setValue("meal_lunch", meals.lunch)
             rest.setValue("meal_dinner", meals.dinner)
-            const fetchAndSetFile = async () => {
-                const res = await fetch(dish.picture, {mode: 'no-cors'})
-                const blob = await res.blob()
-                const mimeType = 'image/png'
-                const file = new File([blob], `file-${Math.random() * 10000000}-${Math.random() * 100000}`, { type: mimeType });
-                picture.current = file
-            }
-            fetchAndSetFile()
         }
         
     }, [dish])
@@ -73,7 +67,7 @@ export const DishEditor = () => {
 
     return <motion.form onSubmit={handleSubmit(onSubmit, onInvalid)} id="update-dish-form" className="pt-6">
         <DishViewerTemplate
-            picture={<PicturePicker initial={dish?.picture ?? null} pictureRef={picture} register={register} />}
+            picture={<PicturePicker picture={pictureSrc} setPicture={setPicture} register={register} />}
             kind={<KindInput register={register} />}
             cooker={<Cooker name={cooker} />}
             name={<NameInput register={register} />}

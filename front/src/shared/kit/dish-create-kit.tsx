@@ -30,11 +30,11 @@ export const useDishForm = (initial?: Dish) => {
 }
 
 export const NameInput = ({register}: {register: UseFormRegister<any>}) => (
-    <motion.input className="box-border rounded-lg p-2 light-block text-3xl font-serif font-medium placeholder:text-[#3a3a3a]" type="text" placeholder="Название:" {...register("name", {required: true})} />
+    <motion.input className="box-border rounded-lg p-2 light-block text-3xl font-serif font-medium placeholder:text-[#3a3a3a] w-full" type="text" placeholder="Название:" {...register("name", {required: true})} />
 )
 
 export const KindInput = ({register}: {register: UseFormRegister<any>}) => (
-    <motion.input className="box-border rounded-lg p-2 light-block text-3xl font-display placeholder:text-[#3a3a3a] w-80" type="text" placeholder="Категория:" {...register("kind", {required: true})} />
+    <motion.input className="box-border rounded-lg p-2 light-block text-3xl font-display placeholder:text-[#3a3a3a] w-72" type="text" placeholder="Категория:" {...register("kind", {required: true})} />
 )
 
 export const RecipeInput = ({register}: {register: UseFormRegister<any>}) => (
@@ -103,8 +103,7 @@ const variants = {
     },
     in: {
         opacity: 1,
-        scale: 1.1,
-        rotate: 0
+        scale: 1,
     },
     out: {
         opacity: 0,
@@ -113,42 +112,43 @@ const variants = {
 }
 
 
-export const PicturePicker = ({register, pictureRef, initial}: {register: UseFormRegister<any>, pictureRef: MutableRefObject<any>, initial: string | null}) => {
-    const [picture, setPicture] = useState<any>(initial)
+export const PicturePicker = ({register, setPicture, picture}: {register: UseFormRegister<any>, setPicture: (blob: Blob | undefined) => any, picture?: string}) => {
+    const [src, setSrc] = useState<string | undefined>(picture)
+    
+    useEffect(() => {
+        if (picture) setSrc(picture)
+    }, [picture])
+
     const field = register("file")
     field.onChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
             const picture = e.target.files[0]
-            setPicture(URL.createObjectURL(picture))
-            pictureRef.current = picture
-            console.log(picture)
+            console.log("o ch",picture)
+            setSrc(URL.createObjectURL(picture))
+            setPicture(picture)
           }
     }
 
     const clearPicture = () => {
-        const picture = null
+        const picture = undefined
+        setSrc(picture)
         setPicture(picture)
-        pictureRef.current = picture
     }
 
-    useEffect(() => {
-        if (initial) setPicture(initial)
-    }, [initial])
-
-    return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl w-[40rem] h-[40rem]")}>
+    return <motion.div className={clsx("flex items-center justify-center relative rounded-2xl")}>
         <AnimatePresence mode="wait">        
         {
-            picture && <motion.img key="picture" className="scale-110" src={picture} variants={variants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
+            src && <motion.img key="picture" className="" src={src} variants={variants} animate="in" initial="init" exit="out" transition={{duration: 0.5}} />
         }
         {
-            picture && <motion.button key="delete" onClick={clearPicture} className="absolute top-5 right-5 dark-block rounded-full p-3" transition={{duration: 0.5}}
-                    whileHover={{scale: 1.1}} whileTap={{scale: 0.9}} variants={variants} animate="in" initial="init" exit="out" >
+            src && <motion.button key="delete" onClick={clearPicture} className="absolute top-5 right-5 dark-block rounded-full p-3" transition={{duration: 0.5}}
+                    whileHover={{scale: 0.95}} whileTap={{scale: 0.9}} variants={variants} animate="in" initial="init" exit="out" >
                     <Cross className="stroke-white" />
                 </motion.button>
         
         }
         {
-            !picture && <motion.label className="flex flex-col gap-5 items-center justify-center rounded-full w-[35rem] h-[35rem] light-block cursor-pointer" 
+            !src && <motion.label className="flex flex-col gap-5 items-center justify-center rounded-full w-full aspect-square light-block cursor-pointer" 
                     htmlFor="picturePicker" whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} transition={{duration: 0.5}}
                     variants={variants} animate="in" initial="init" exit="out" >
                     <PlusLg />
@@ -177,13 +177,13 @@ export const CreateButton = ({disabled}: {disabled: boolean}) => (
 )
 
 export const UpdateButton = ({disabled}: {disabled: boolean}) => (
-    <motion.button form="update-dish-form" type="submit" className={twMerge("box-border text-3xl w-full rounded-lg dark-block px-5 py-4")} whileHover={{scale: 0.98}} whileTap={{scale: 0.95}} >
+    <Button type="submit" className="dark-block" disabled={disabled} >
         Сохранить
-    </motion.button>
+    </Button>
 )
 
 export const DeleteButton = ({disabled, remove}: {disabled: boolean, remove: () => any}) => (
-    <Button disabled={disabled} type="button" className="bg-red-600 transition-colors duration-500 text-white">
+    <motion.button disabled={disabled} onClick={remove} type="button" className={twMerge("box-border text-3xl w-full rounded-lg  px-5 py-4", "bg-red-600 transition-colors duration-500 text-white")}>
         Удалить
-    </Button>
+    </motion.button>
 )

@@ -4,7 +4,7 @@ import { dishService } from "@features/dish/service"
 import { useAppSelector } from "@shared/hooks"
 import { CreateButton, DishData, KindInput, MealCheckboxes, NameInput, PicturePicker, RatioInput, RecipeInput, useDishForm } from "@shared/kit/dish-create-kit"
 import { motion } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
@@ -14,9 +14,10 @@ export const DishCreator = () => {
     const {register, handleSubmit} = useDishForm()
     const cooker = useAppSelector(state => state.auth.username)
     const [createDish, {isLoading}] = dishService.useCreateDishMutation()
-    const picture = useRef<any>(null)
+    const [picture, setPicture] = useState<Blob | undefined>(undefined)
     const onSubmit: SubmitHandler<DishData> = async (data) => {
         try {
+            if (!picture) return
             await createDish({...data, picture}).unwrap()
             return navigate("/studio", {replace: true})
         } catch(err) {
@@ -25,7 +26,7 @@ export const DishCreator = () => {
     
     return <motion.form onSubmit={handleSubmit(onSubmit)} className="pt-6">
         <DishViewerTemplate 
-            picture={<PicturePicker initial={null} pictureRef={picture} register={register} />}
+            picture={<PicturePicker setPicture={setPicture} register={register} />}
             kind={<KindInput register={register} />}
             cooker={<Cooker name={cooker} />}
             name={<NameInput register={register} />}
