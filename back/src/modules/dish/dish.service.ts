@@ -103,11 +103,13 @@ export class DishService {
         return dish;
     }
 
-    async updateDish(picture: Express.Multer.File, {categories, tutorial, ...body}: CreateDishFormDto, cookerId: number, dishId: number) : Promise<Dish> {
+    async updateDish({categories, tutorial, ...body}: CreateDishFormDto, cookerId: number, dishId: number, picture?: Express.Multer.File) : Promise<Dish> {
         const dish = await this.dishRepository.findOne({where: {id: dishId}});
         if (!dish) throw new BadRequestException(AppError.NO_DISH);
-        const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
-        dish.picture = url;
+        if (picture) {
+            const url = await this.uploadService.uploadLocally(picture.originalname, picture.buffer);
+            dish.picture = url;
+        }        
         dish.kind = body.kind;
         dish.name = body.name;
         dish.proteins = Number(body.proteins);
