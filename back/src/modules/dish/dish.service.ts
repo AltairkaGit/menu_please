@@ -128,7 +128,7 @@ export class DishService {
     async removeDish(dish: Dish) : Promise<void> {
         await this.dishRepository.destroy({
             where: {
-                dishId: dish.id
+                id: dish.id
             }
         });
     }

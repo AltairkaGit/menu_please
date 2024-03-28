@@ -58,7 +58,7 @@ export class DishController {
     }
 
     @Put(":id")
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtGuard, RolesGuard, DishOwnerGuard)
     @Roles(Role.Cooker)
     @UseInterceptors(FileInterceptor('file'))
     async updateDish(@Body() body: CreateDishFormDto, @Req() req: any, @Param('id') dishId: number, @UploadedFile(
